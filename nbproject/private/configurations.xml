@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="94">
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <platform>3</platform>
+      </toolsSet>
+      <dbx_gdbdebugger version="1">
+        <gdb_pathmaps>
+        </gdb_pathmaps>
+        <gdb_interceptlist>
+          <gdbinterceptoptions gdb_all="false" gdb_unhandled="true" gdb_unexpected="true"/>
+        </gdb_interceptlist>
+        <gdb_options>
+          <DebugOptions>
+          </DebugOptions>
+        </gdb_options>
+        <gdb_buildfirst gdb_buildfirst_overriden="false" gdb_buildfirst_old="false"/>
+      </dbx_gdbdebugger>
+      <nativedebugger version="1">
+        <engine>gdb</engine>
+      </nativedebugger>
+      <runprofile version="9">
+        <runcommandpicklist>
+          <runcommandpicklistitem>wind.exe "-i" "test/iphone1.wav" "-o" "test/iphone1.txt" "-t" "3" "-g" "1" "-f" "43" "-w" "25"</runcommandpicklistitem>
+          <runcommandpicklistitem>wind.exe "-i" "test/windsample.txt.wav" "-o" "test/windsample.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25"</runcommandpicklistitem>
+          <runcommandpicklistitem>wind.exe "-i" "test/windsample.wav" "-o" "test/windsample.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25"</runcommandpicklistitem>
+          <runcommandpicklistitem>wind.exe "-i" "test/iphone1.wav" "-o" "test/iphone1.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25"</runcommandpicklistitem>
+          <runcommandpicklistitem>windDet.exe "-i" "test/iphone1.wav" "-o" "test/iphone1.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25"</runcommandpicklistitem>
+          <runcommandpicklistitem>windDet "-i" "test/iphone1.wav" "-o" "test/iphone1.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25"</runcommandpicklistitem>
+          <runcommandpicklistitem>./windDet "-i" "test/iphone1.wav" "-o" "test/iphone1.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25"</runcommandpicklistitem>
+          <runcommandpicklistitem>./windDet "-i" "CFunctionsFeatures/iphone1.wav" "-o" "test/iphone1.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25"</runcommandpicklistitem>
+          <runcommandpicklistitem>./windDet "-i" "CFunctionsFeatures/02 BioD.wav" "-o" "test/02 BioD.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25"</runcommandpicklistitem>
+          <runcommandpicklistitem>./distDet "-i" "CFunctionsFeatures/02 BioD.wav" "-o" "test/02 BioD.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25"</runcommandpicklistitem>
+        </runcommandpicklist>
+        <runcommand>./distDet "-i" "CFunctionsFeatures/02 BioD.wav" "-o" "test/02 BioD.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25"</runcommand>
+        <rundir></rundir>
+        <buildfirst>true</buildfirst>
+        <terminal-type>0</terminal-type>
+        <remove-instrumentation>0</remove-instrumentation>
+        <environment>
+        </environment>
+      </runprofile>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <platform>3</platform>
+      </toolsSet>
+      <dbx_gdbdebugger version="1">
+        <gdb_pathmaps>
+        </gdb_pathmaps>
+        <gdb_interceptlist>
+          <gdbinterceptoptions gdb_all="false" gdb_unhandled="true" gdb_unexpected="true"/>
+        </gdb_interceptlist>
+        <gdb_options>
+          <DebugOptions>
+          </DebugOptions>
+        </gdb_options>
+        <gdb_buildfirst gdb_buildfirst_overriden="false" gdb_buildfirst_old="false"/>
+      </dbx_gdbdebugger>
+      <nativedebugger version="1">
+        <engine>gdb</engine>
+      </nativedebugger>
+      <runprofile version="9">
+        <runcommandpicklist>
+          <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
+        </runcommandpicklist>
+        <runcommand>"${OUTPUT_PATH}"</runcommand>
+        <rundir></rundir>
+        <buildfirst>true</buildfirst>
+        <terminal-type>0</terminal-type>
+        <remove-instrumentation>0</remove-instrumentation>
+        <environment>
+        </environment>
+      </runprofile>
+    </conf>
+  </confs>
+</configurationDescriptor>
