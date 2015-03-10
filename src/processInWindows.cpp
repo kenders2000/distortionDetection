@@ -260,6 +260,7 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
     double *skewness_ = (double*) calloc(1, sizeof (double));
     double*peaks_ = (double*) malloc(sizeof (double)*WIN_N);
     double* SpecFluxV = (double*) malloc(WIN_N * sizeof (double));
+    double rms1s=0;
     double SpecFlux = 0;
     double SpecFlux2 = 0;
     sprintf(str2, "%s.b", outFilename);
@@ -362,6 +363,8 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                 scaleover_temp = sqrt(scaleover_temp);
                 scaleprev_temp = sqrt(scaleprev_temp);
                 scale_temp = sqrt(scale_temp);
+                rms1s=rms1s+scaleover_temp/ ((double) frameAve * 2.0)+scale_temp/ ((double) frameAve * 2.0);
+
                 for (n = 0; n < WIN_N; n++) {
                     
 //                tdData=tdData./sqrt(mean((tdData.^2)));
@@ -485,7 +488,7 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                     SpecFlux = SpecFlux + ((pow(lastOverspectrum[n] - lastspectrum[n], 2)));
                 SpecFlux2 = SpecFlux2 + sqrt(SpecFlux) / ((double)frameAve * 2.0);
                 counter++;
-                if ((frame % (frameAve)) == 0 && (frame>=frameAve*2) ) {
+                if ((frame % (frameAve)) == 0 && ( (double)(frame*WIN_N)/44100.0 >1 ) ) {
                     double pmfmean=0;
                     for (n = 0; n < 255; n++) {
                         pmfmean=pmfmean+outMatrix_[n];
@@ -507,7 +510,10 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                         //printf("%f ",feats[n]);
                     }
                     int distLevel = distTree.decisionTreeFun(feats);
-                    printf("frame centre %f Distortion Amount %i \n",(frame-frameAve/2.0),5-distLevel);
+                    //printf("frame centre %f Distortion Amount %i \n",(frame),5-distLevel);
+                   fprintf(pFile, " %0.2f %0.0f %0.2f \n", (double)(frame*WIN_N)/44100.0, rms1s, distLevel);
+                    printf("%0.2f %0.2f %i \n", (double)(frame*WIN_N)/44100.0, rms1s/(double)rms[0], distLevel);
+                    
                     fprintf(pFileMeanData, "\n");
                     counter = 0;
                     //reset counters /vectors
@@ -523,7 +529,7 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                     skewness_[0] = 0;
                     count__[0] = 0;
                     SpecFlux2 = 0;
-
+                    rms1s=0;
                 }
 
                 for (n = 0; n < WIN_N; n++) {
@@ -546,66 +552,69 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
     fclose(pFile);
     fclose(pFileRawData);
     fclose(pFileMeanData);
-
     // Global stats
-    float aveAveLevel = 0;
-    float maxAveLevel = 0;
-    float minAveSNR = 5;
-    float aveAveSNR = 0;
+    float averms = 0;
+    float maxrms = 0;
+    float minrms = 1000000;   
+
     //float thresh = 0.2;
-    float avecomb = 0;
-    float maxcomb = 0;
+    float aveQual = 0;
+    float maxQual = 5;
+    float minQual = 0;  
+    
     float count_wF5 = 0;
     float count_wF4 = 0;
     float count_wF3 = 0;
     float count_wF2 = 0;
     float count_wF1 = 0;
     float count_wF0 = 0;
+    
+    
     counter = 0;
     //  pFile2 = fopen ( 'tmp.txt' , "w");
     pFile = fopen(str2, "r");
-    char mystring[1000];
+    char mystring[100000];
     while (fgets(mystring, sizeof (mystring), pFile) != NULL) {
 
-        float dBA, t, level, snr, comb;
-        sscanf(mystring, "%f %f %f %f %f", &t, &dBA,
-                &level, &snr, &comb);
+        float rms, t, Qual;
+        sscanf(mystring, "%f %f %f", &t, &rms,
+                &Qual);
 
-        if (level > maxAveLevel)
-            maxAveLevel = level;
+        if (rms > maxrms)
+            maxrms = rms;
+        if (rms < minrms)
+            minrms = rms;
 
-        if (snr < minAveSNR)
-            minAveSNR = snr;
 
-        if (comb > maxcomb)
-            maxcomb = comb;
+        if (Qual > maxQual)
+            maxQual = Qual;
+        if (Qual < minQual)
+            minQual = Qual;
 
-        avecomb = avecomb + comb;
-        aveAveSNR = aveAveSNR + snr;
-        aveAveLevel = aveAveLevel + level;
 
-        if (level < 1)
+        
+        averms = averms + (rms);
+        aveQual = aveQual*rms + Qual; //%quality weighted by rms level
+
+
             count_wF0++;
 
 
-        if (snr >= 0 && snr < 1 && level >= 1)
+        if (Qual >= 0 && Qual < 1 )
             count_wF5++;
-        if (snr >= 1 && snr < 2 && level >= 1)
+        if (Qual >= 1 && Qual < 2)
             count_wF4++;
-        if (snr >= 2 && snr < 3 && level >= 1)
+        if (Qual >= 2 && Qual < 3 )
             count_wF3++;
-        if (snr >= 3 && snr < 4 && level >= 1)
+        if (Qual >= 3 && Qual < 4 )
             count_wF2++;
-        if (snr >= 4 && snr < 5 && level >= 1)
+        if (Qual >= 4 && Qual < 5 )
             count_wF1++;
 
-
-
-        //printf("%f %f %f %f %f \n", t, dBA, 
-        //       level,snr, comb);
         counter++;
     }
     fclose(pFile);
+
     count_wF0 = count_wF0 / counter * 100.0;
     count_wF1 = count_wF1 / counter * 100.0;
     count_wF2 = count_wF2 / counter * 100.0;
@@ -613,46 +622,40 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
     count_wF4 = count_wF4 / counter * 100.0;
     count_wF5 = count_wF5 / counter * 100.0;
 
-    avecomb = avecomb / counter;
-    aveAveSNR = aveAveSNR / counter;
-    aveAveLevel = aveAveLevel / counter;
+    aveQual = (aveQual/5) / counter;
+    averms = averms / counter;
 
     // remove(outFilename);
     pFileJSON = fopen(jsonFilename, "w");
     //
+
     FILE * pFile2;
     pFile2 = fopen(outFilename, "w");
     pFile = fopen(str2, "r");
-    fprintf(pFile2, "Microphone Wind Noise Detection - University of Salford - the Good Recording Project http://www.goodrecording.net \n\n", filename);
-    fprintf(pFile2, "Microphone Wind noise Analysis for input file %s\n\n", filename);
-    fprintf(pFile2, "Wind Noise Statistics, %% number of frames with wind noise detected at the following Signal to noise Ratios (high values = good quality low values = bad quality). also presented is the range in Quality Degradation that each SNR range represents.\n\n");
-    fprintf(pFile2, "SNR range;\t>20dB,\t20 to 10dB,\t10 to 0dB,\t0 to -10dB,\t-10 to -20dB,\t<-20dB\n", count_wF0, count_wF1, count_wF2, count_wF3, count_wF4, count_wF5);
-    fprintf(pFile2, "Qual. Degradation;\t<24%%,\t24 to 40%%,\t40 to 54%%,\t54 to 69%%,\t69 to 95%%,\t>95%%\n");
-    fprintf(pFile2, "%% of time in each SNR range;\t%0.1f,\t%0.1f,\t%0.1f,\t%0.1f,\t%0.1f,\t%0.1f\n", count_wF0, count_wF1, count_wF2, count_wF3, count_wF4, count_wF5);
+    fprintf(pFile2, "Distortion Detection - University of Salford - the Good Recording Project http://www.goodrecording.net \n\n", filename);
+    fprintf(pFile2, "Distortion Analysis for input file %s\n\n", filename);
+    fprintf(pFile2, "Distortion Statistics, %% number of frames with distortion detected at the following Signal to noise Ratios (high values = good quality low values = bad quality)\n\n");
+    fprintf(pFile2, "Qual. Degradation;\t<24%%,\t24 to 40%%,\t40 to 54%%,\t54 to 69%%,\t69 to 95%%,\t>95%%\n");    
+       fprintf(pFile2, "%% of time in each Degredation range;\t%0.1f,\t%0.1f,\t%0.1f,\t%0.1f,\t%0.1f,\t%0.1f\n", count_wF0, count_wF1, count_wF2, count_wF3, count_wF4, count_wF5);
     fprintf(pFile2, "\n");
-    fprintf(pFile2, "Wind noise time history\n\n");
+    fprintf(pFile2, "Distortion noise time history\n\n");
     fprintf(pFile2, "T(s)\t\tQuality Degradation(%%)\t dBA \n");
-
     //JSON global stats
-    fprintf(pFileJSON, "[\n\t{\n\t\"test\": \"Global Stats\",\n\t\"results\": [");
-    fprintf(pFileJSON, "%0.1f,\t%0.1f,\t%0.1f,\t%0.1f,\t%0.1f,\t%0.1f]\n\t},", count_wF0, count_wF1, count_wF2, count_wF3, count_wF4, count_wF5);
-
-    fprintf(pFileJSON, "\n\t{\n\t\"test\": \"Time History\",\n\t\"results\": [\n");
-
+     //printf("heeeerrrre %s\n",jsonFilename);
+     fprintf(pFileJSON, "{\n \t\"Global Stats\":\n \t [ \n" );                    
+    fprintf(pFileJSON, "\t\t%0.1f,\t%0.1f,\t%0.1f,\t%0.1f,\t%0.1f,\t%0.1f\n\t\t],\n", count_wF0, count_wF1, count_wF2, count_wF3, count_wF4, count_wF5);
+    fprintf(pFileJSON, "\t \"Time History\":\n\t [\n" );    
     while (fgets(mystring, sizeof (mystring), pFile) != NULL) {
 
-        float dBA, t, level, snr, comb;
-        sscanf(mystring, "%f %f %f %f %f;", &t, &dBA,
-                &level, &snr, &comb);
-        float x = snr;
-        float qual = 0.0093616465 * pow(x, 9) + -0.2408574076 * pow(x, 8) + 2.6409491876 * pow(x, 7) + -16.0598328947 * pow(x, 6) + 59.1080787296 * pow(x, 5) + -135.0673590478 * pow(x, 4) + 189.6816801547 * pow(x, 3) + -156.8624014598 * pow(x, 2) + 83.7429623557 * pow(x, 1) + 4.5226369050;
-        if (comb == 0)
-            qual = 100;
+        float rms, t, qual;
+        sscanf(mystring, "%f %f %f", &t, &rms,
+                &qual);
 
-        fprintf(pFile2, "%4.1f\t\t%0.0f\t\t\t\t\t\t%4.0f\n", t, 100 - qual, dBA);
+        fprintf(pFile2, "%4.1f\t\t%0.0f\t\t\t\t\t\t%4.0f\n", t, 100 - qual*100.0, rms);
         if (firstWin == 1)
             fprintf(pFileJSON, ",\n");
-        fprintf(pFileJSON, "\t\t{\"T\": %0.2f, \"dBA\": %0.0f, \"QDeg\": %0.2f}", t, dBA, 100 - qual);
+        
+        fprintf(pFileJSON, "\t\t{\"T\": %0.2f, \"dBA\": %0.0f, \"QDeg\": %0.2f}", t, rms, 100 - qual*100.0);
         firstWin = 1;
         counter++;
     }
@@ -660,9 +663,9 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
     ///////////////////////////// Find contiguous regions without wind noise
     fclose(pFile);
     pFile = fopen(str2, "r");
-    fprintf(pFileJSON, "\n \t\t] \n \t},\n");
-    fprintf(pFileJSON, "\t{\n\t\"test\": \"wind free regions\",\n\t\"results\": [\n");
 
+  fprintf(pFileJSON, "\n\t],\n");
+    fprintf(pFileJSON, "\t\"Distortion free regions\":\n \t [\n" );                    
 
 
 
@@ -672,7 +675,7 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
     int first = 0;
     float win = 0;
     float start = 0;
-    fprintf(pFile2, "\nWind free regions from - to (s) using a Threshold of %2.0f\n\n", thresh);
+    fprintf(pFile2, "\nDistortion free regions from - to (s) using a Threshold of %2.0f\n\n", thresh);
 
     while (fgets(mystring, sizeof (mystring), pFile) != NULL) {
 
@@ -691,6 +694,7 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
             fprintf(pFile2, "%0.2f\t%0.2f\n", start, t - win * 2);
             if (firstWin == 1)
                 fprintf(pFileJSON, ",\n");
+            
             fprintf(pFileJSON, "\t\t{\"s\": %0.2f, \"e\": %0.0f}", t, start, t - win * 2);
             firstWin = 1;
 
@@ -722,7 +726,7 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
 
     fclose(pFile);
     fclose(pFile2);
-    fprintf(pFileJSON, "\t]\n}\n]");
+    fprintf(pFileJSON, "\n\t]\n}\n");
     fclose(pFileJSON);
 
     //remove(str2);

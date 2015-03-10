@@ -1,0 +1,30 @@
+Distortion Detection - University of Salford - the Good Recording Project http://www.goodrecording.net 
+
+Distortion Analysis for input file CFunctionsFeatures/02 BioD.wav
+
+Distortion Statistics, % number of frames with distortion detected at the following Signal to noise Ratios (high values = good quality low values = bad quality)
+
+Qual. Degradation;	<24%,	24 to 40%,	40 to 54%,	54 to 69%,	69 to 95%,	>95%
+% of time in each Degredation range;	100.0,	0.0,	0.0,	0.0,	0.0,	100.0
+
+Distortion noise time history
+
+T(s)		Quality Degradation(%)	 dBA 
+ 2.0		100						2580
+ 3.0		100						2158
+ 4.0		100						2727
+ 5.0		100						2133
+ 6.0		100						1344
+ 7.0		100						2919
+ 8.0		100						11084
+ 9.0		100						10604
+10.0		100						3727
+11.0		100						2949
+12.0		100						1661
+13.0		100						1124
+14.0		100						3241
+15.0		100						1615
+16.0		100						2291
+
+Distortion free regions from - to (s) using a Threshold of 25
+

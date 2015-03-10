@@ -92,12 +92,12 @@ int main(int argc, char* argv[]) {
             case 'o':{
                 out_fname = optarg;
                 printf("\nOutput file=%s", out_fname);
-                std::string Str = std::string(optarg);
-                replaceExt(Str, "json");
-                json_fname= Str.c_str();
-                printf("\nOutput file=%s", json_fname);
-
                 break;}
+            case 'j':{
+                json_fname = optarg;
+                //printf("\nOutput file=%s", json_fname);
+
+            break;}
             case 't':{
                 tree = atoi(optarg) - 1;
                 if (tree < 3) {
