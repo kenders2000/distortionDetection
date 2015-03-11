@@ -632,7 +632,7 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
     pFile = fopen(str2, "r");
     fprintf(pFile2, "Distortion Detection - University of Salford - the Good Recording Project http://www.goodrecording.net \n\n", filename);
     fprintf(pFile2, "Distortion Analysis for input file %s\n\n", filename);
-    fprintf(pFile2, "Distortion Statistics, %% number of frames with distortion detected at the following Signal to noise Ratios (high values = good quality low values = bad quality)\n\n");
+    fprintf(pFile2, "Distortion Statistics, %% number of frames with distortion detected at the following Quality Levels \n\n");
     fprintf(pFile2, "%% of time in each Degradation range.\n");
     fprintf(pFile2, "Bad,\tPoor,\tFair,\tGood,\tExcellent\n");
     fprintf(pFile2, "%0.1f,\t%0.1f,\t%0.1f,\t%0.1f,\t%0.1f\n", count_wF1, count_wF2, count_wF3, count_wF4, count_wF5);
