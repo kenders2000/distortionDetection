@@ -4,27 +4,34 @@ Distortion Analysis for input file CFunctionsFeatures/02 BioD.wav
 
 Distortion Statistics, % number of frames with distortion detected at the following Signal to noise Ratios (high values = good quality low values = bad quality)
 
-Qual. Degradation;	<24%,	24 to 40%,	40 to 54%,	54 to 69%,	69 to 95%,	>95%
-% of time in each Degredation range;	100.0,	0.0,	0.0,	0.0,	0.0,	100.0
+% of time in each Degradation range.
+Bad,	Poor,	Fair,	Good,	Excellent
+12.5,	6.2,	0.0,	6.2,	75.0
 
 Distortion noise time history
 
-T(s)		Quality Degradation(%)	 dBA 
- 2.0		100						2580
- 3.0		100						2158
- 4.0		100						2727
- 5.0		100						2133
- 6.0		100						1344
- 7.0		100						2919
- 8.0		100						11084
- 9.0		100						10604
-10.0		100						3727
-11.0		100						2949
-12.0		100						1661
-13.0		100						1124
-14.0		100						3241
-15.0		100						1615
-16.0		100						2291
+T(s)		Quality Degradation(%)	 RMS (normalised to global RMS) 
+1.00		100.00						0.01
+2.00		0.00						0.52
+3.00		0.00						0.44
+3.99		0.00						0.56
+4.99		0.00						0.44
+5.99		0.00						0.28
+6.99		0.00						0.60
+7.99		60.00						2.28
+8.99		80.00						2.18
+9.98		0.00						0.77
+10.98		20.00						0.61
+11.98		0.00						0.34
+12.98		0.00						0.23
+13.98		0.00						0.67
+14.98		0.00						0.33
+15.98		0.00						0.47
+
+Average Quality (RMS weighted ave)
+ 46.8
 
 Distortion free regions from - to (s) using a Threshold of 25
 
+1.00	6.99
+8.98	14.98

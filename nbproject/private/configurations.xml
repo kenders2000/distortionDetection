@@ -24,9 +24,6 @@
       </nativedebugger>
       <runprofile version="9">
         <runcommandpicklist>
-          <runcommandpicklistitem>wind.exe "-i" "test/iphone1.wav" "-o" "test/iphone1.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25"</runcommandpicklistitem>
-          <runcommandpicklistitem>windDet.exe "-i" "test/iphone1.wav" "-o" "test/iphone1.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25"</runcommandpicklistitem>
-          <runcommandpicklistitem>windDet "-i" "test/iphone1.wav" "-o" "test/iphone1.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25"</runcommandpicklistitem>
           <runcommandpicklistitem>./windDet "-i" "test/iphone1.wav" "-o" "test/iphone1.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25"</runcommandpicklistitem>
           <runcommandpicklistitem>./windDet "-i" "CFunctionsFeatures/iphone1.wav" "-o" "test/iphone1.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25"</runcommandpicklistitem>
           <runcommandpicklistitem>./windDet "-i" "CFunctionsFeatures/02 BioD.wav" "-o" "test/02 BioD.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25"</runcommandpicklistitem>
@@ -34,8 +31,11 @@
           <runcommandpicklistitem>./distDet "-i" "CFunctionsFeatures/02 Bio.wav" "-o" "test/02 BioD.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25"</runcommandpicklistitem>
           <runcommandpicklistitem>./distDet "-i" "CFunctionsFeatures/02 BioD.wav" "-o" "test/02 BioD.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25"</runcommandpicklistitem>
           <runcommandpicklistitem>./distDet "-i" "CFunctionsFeatures/02 BioD.wav" "-o" "test/02 BioD.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25" "-j" "BioD.json"</runcommandpicklistitem>
+          <runcommandpicklistitem>./distDet "-v" "1" "-i" "CFunctionsFeatures/02 BioD.wav" "-o" "test/02 BioD.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25" "-j" "BioD.json"</runcommandpicklistitem>
+          <runcommandpicklistitem>./distDet "-v" "1" "-i" "CFunctionsFeatures/02 BioD.wav" "-o" "test/02 BioD.txt"  "-f" "43" "-w" "70" "-j" "BioD.json"</runcommandpicklistitem>
+          <runcommandpicklistitem>./distDet "-v" "1" "-i" "CFunctionsFeatures/02 BioD.wav" "-o" "test/02 BioD.txt"  "-f" "43" "-w" "25" "-j" "BioD.json"</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>./distDet "-i" "CFunctionsFeatures/02 BioD.wav" "-o" "test/02 BioD.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25" "-j" "BioD.json"</runcommand>
+        <runcommand>./distDet "-v" "1" "-i" "CFunctionsFeatures/02 BioD.wav" "-o" "test/02 BioD.txt"  "-f" "43" "-w" "25" "-j" "BioD.json"</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>

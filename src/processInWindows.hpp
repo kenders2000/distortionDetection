@@ -38,7 +38,7 @@ extern "C" {
     
     void initVarsFeats(int N,int Fs);
     void computeMFCCs(float *windowIn, int N, int Fs,float *mfcc);
-    void loadWav(char * inFilename, char * outFilename,const char *jsonFilename,char *treeDir,float ,int frameAve,float thresh);
+    void loadWav(char * inFilename, char * outFilename,const char *jsonFilename,char *treeDir,float ,int frameAve,float thresh,int verbose);
     void wavRms(char *filename, float* maxL, float *rms);
 ////
 }
