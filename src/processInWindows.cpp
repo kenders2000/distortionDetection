@@ -620,7 +620,7 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
     count_wF4 = count_wF4 / counter * 100.0;
     count_wF5 = count_wF5 / counter * 100.0;
 
-    aveQual = (aveQual / 5) / counter;
+    aveQual = (aveQual / 5) / averms;
     averms = averms / counter;
 
     // remove(outFilename);

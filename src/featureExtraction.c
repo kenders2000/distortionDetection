@@ -46,8 +46,8 @@ void initVarsFeats(int N,int Fs)
     float MINF = 20.0;
     int fftn = N;
     int i,i2;
-       cin = (kiss_fft_cpx*)malloc(sizeof(kiss_fft_cpx)*N);
-       cout = (kiss_fft_cpx*)malloc(sizeof(kiss_fft_cpx)*N);
+    cin = (kiss_fft_cpx*)malloc(sizeof(kiss_fft_cpx)*N);
+    cout = (kiss_fft_cpx*)malloc(sizeof(kiss_fft_cpx)*N);
 
     cfg = kiss_fft_alloc(N,0,0,0);
 
