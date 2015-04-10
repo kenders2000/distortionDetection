@@ -124,9 +124,11 @@ void wavRms(char *filename, float *maxL, float* rms) {
             frame++;
         }
     }
-
-    rms[0] = sqrtf(tmp3 / (double(frame)));
-
+    printf("%f\n",tmp3/double(frame));
+    rms[0] = sqrt(tmp3 / (double(frame)));
+      rewind(wav);
+      fclose (wav);
+      
 }
 
 void loadWav(char * filename, char * outFilename, const char *jsonFilename, char *treeDir, float gain, int frameAve, float thresh, int verbose) {
@@ -323,7 +325,7 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                 }
 
 
-                float tmp3 = (tmp2 / (float) header.nochan); //*  158489=  10^(104/20)
+                float tmp3 = (tmp2 / (float) header.nochan)/rms[0]; //*  158489=  10^(104/20)
 
                 window[wN] = last1s[N1s]; //last window before overwritten
                 last1s[N1s] = tmp3; // Overwrite
@@ -363,7 +365,7 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                 scaleover_temp = sqrt(scaleover_temp);
                 scaleprev_temp = sqrt(scaleprev_temp);
                 scale_temp = sqrt(scale_temp);
-                rms1s = rms1s + scaleover_temp / ((double) frameAve * 2.0) + scale_temp / ((double) frameAve * 2.0);
+                rms1s = rms1s + scaleover_temp / ((double) frameAve ) ;//+ scale_temp / ((double) frameAve * 2.0);
 
                 for (n = 0; n < WIN_N; n++) {
 
@@ -402,12 +404,13 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                 for (n = 0; n < 255; n++) {
                     featstmp[n] = outMatrix[n];
                 }
-                featstmp[255] = skewness[0];
+                featstmp[255] = (SpecFlux2);
                 featstmp[256] = kurt[0];
                 featstmp[257] = ent[0];
                 featstmp[258] = roughness[0];
-                featstmp[259] = count_[0];
-                featstmp[260] = (SpecFlux2);
+                featstmp[259] = skewness[0];
+                featstmp[260] = count_[0];
+            
 
                 for (n = 0; n < 261; n++) {
                     fprintf(pFileRawData, "%f ", featstmp[n]);
@@ -453,12 +456,12 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                 for (n = 0; n < 255; n++) {
                     featstmp[n] = outMatrix[n];
                 }
-                featstmp[255] = skewness[0];
+                featstmp[255] = (SpecFlux2);
                 featstmp[256] = kurt[0];
                 featstmp[257] = ent[0];
                 featstmp[258] = roughness[0];
-                featstmp[259] = count_[0];
-                featstmp[260] = (SpecFlux2);
+                featstmp[259] = skewness[0];
+                featstmp[260] = count_[0];
 
                 for (n = 0; n < 261; n++) {
                     fprintf(pFileRawData, "%f ", featstmp[n]);
@@ -488,7 +491,7 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                     SpecFlux = SpecFlux + ((pow(lastOverspectrum[n] - lastspectrum[n], 2)));
                 SpecFlux2 = SpecFlux2 + sqrt(SpecFlux) / ((double) frameAve * 2.0);
                 counter++;
-                if ((frame % (frameAve)) == 0 && (frame > 3)) {
+                if ((frame % (frameAve)) == 0 && (frame > frameAve)) {
                     double pmfmean = 0;
                     for (n = 0; n < 255; n++) {
                         pmfmean = pmfmean + outMatrix_[n];
@@ -498,22 +501,22 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                         feats[n] = outMatrix_[n] / pmfmean;
                         //printf("%f \n",feats[n]);
                     }
-                    feats[255] = skewness_[0];
+                    feats[255] = (SpecFlux2);
                     feats[256] = kurt_[0];
                     feats[257] = ent_[0];
                     feats[258] = roughness_[0];
-                    feats[259] = count__[0];
-                    feats[260] = (SpecFlux2);
+                    feats[259] = skewness_[0];
+                    feats[260] = count__[0];
                     //                printf("%f \n",feats[260]);
                     for (n = 0; n < 261; n++) {
                         fprintf(pFileMeanData, "%f ", feats[n]);
                         //printf("%f ",feats[n]);
                     }
-                    int distLevel = distTree.decisionTreeFun(feats);
+                            int distLevel = distTree.decisionTreeFun(feats);
                     //printf("frame centre %f Distortion Amount %i \n",(frame),5-distLevel);
-                    fprintf(pFile, " %0.2f %0.2f %i \n", (double) (frame * WIN_N) / 44100.0, rms1s / (double) rms[0], distLevel);
+                    fprintf(pFile, " %0.2f %0.2f %i \n", (double) (frame * WIN_N - frameAve* WIN_N) / 44100.0, sqrt(rms1s), distLevel);
                     if (verbose ==1){
-                    printf("Time (s) %0.2f RMS %0.2f Quality %0.0f \n", (double) (frame * WIN_N) / 44100.0, rms1s / (double) rms[0], ((double) distLevel)/5.0*100.0);
+                    printf("Time (s) %0.2f RMS %0.2f Quality %0.0f \n", (double) (frame * WIN_N - frameAve* WIN_N) / 44100.0, sqrt(rms1s) , ((double) distLevel)/5.0*100.0);
                     }
                     fprintf(pFileMeanData, "\n");
                     counter = 0;
@@ -683,7 +686,7 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
         sscanf(mystring, "%f %f %f", &tw, &rmsw,
                 &Qualw);
         tw = tw - 1.0;
-        Qualw = (Qualw / 5)*100.0; //dist degredation
+        Qualw = (Qualw / 5)*100.0; //Quality
         thisclean = (int) (Qualw > thresh);
 
        // printf("%i %i %f %f\n", thisclean, lastclean, Qualw, thresh);
@@ -702,6 +705,7 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
         lastclean = thisclean;
         counter++;
     }
+    // finish up if last window is clean
     if (thisclean == 1 && lastclean == 1) // previous frame was clean now its dist
     {
         fprintf(pFile2, "%0.2f\t%0.2f\n", start, tw);
