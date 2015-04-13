@@ -6,30 +6,30 @@ Distortion Statistics, % number of frames with distortion detected at the follow
 
 % of time in each Degradation range.
 Bad,	Poor,	Fair,	Good,	Excellent
-6.7,	6.7,	6.7,	13.3,	66.7
+14.3,	0.0,	0.0,	14.3,	71.4
 
 Distortion noise time history
 
 T(s)		Quality Degradation(%)	 RMS (normalised to global RMS) 
-1.00		100.00						0.73
-2.00		0.00						0.66
-3.00		0.00						0.75
-3.99		0.00						0.67
-4.99		0.00						0.53
-5.99		0.00						0.77
-6.99		60.00						1.51
-7.99		40.00						1.48
-8.99		20.00						0.88
-9.98		0.00						0.78
-10.98		0.00						0.58
-11.98		0.00						0.47
-12.98		0.00						0.82
-13.98		20.00						0.58
-14.98		0.00						0.68
+1.97		0.00						1.25
+2.97		0.00						0.96
+3.97		0.00						0.84
+4.97		0.00						0.58
+5.97		0.00						1.56
+6.97		80.00						3.21
+7.96		80.00						3.13
+8.96		0.00						1.49
+9.96		20.00						0.97
+10.96		0.00						0.60
+11.96		0.00						0.62
+12.96		0.00						1.10
+13.96		20.00						0.66
+14.95		0.00						0.83
 
 Average Quality (RMS weighted ave)
- 78.8
+ 69.7
 
 Distortion free regions from - to (s) using a Threshold of 25
 
-1.00	13.98
+0.97	4.97
+7.96	13.95

@@ -154,7 +154,9 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
 
     float *rms = (float*) malloc(sizeof (float)*1);
     rms[0] = 0;
-    wavRms(filename, maxL, rms);
+    wavRms(filename, maxL, rms);    
+    double rmsD=(double)rms[0];
+
     FILE * wav;
     wav = fopen(filename, "r");
     //check openable
@@ -209,6 +211,7 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
     float *last1s;
     float global_scale_max_over_1s = 0;
     float lastscale = 0;
+    float scale =0;
     last1s = (float*) malloc(sizeof (float)*WIN_N * frameAve);
     int i;
     for (i = 0; i < (WIN_N * frameAve); i++)
@@ -325,22 +328,25 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                 }
 
 
-                float tmp3 = (tmp2 / (float) header.nochan)/rms[0]; //*  158489=  10^(104/20)
+                double tmp3 = ((double) tmp2 / (double) header.nochan); //*  158489=  10^(104/20)
 
                 window[wN] = last1s[N1s]; //last window before overwritten
-                last1s[N1s] = tmp3; // Overwrite
 
-                if (abs(last1s[N1s]) > global_scale_max_over_1s)
-                    global_scale_max_over_1s = abs(last1s[N1s]);
+                if (abs(tmp3) > global_scale_max_over_1s)
+                    global_scale_max_over_1s = abs(tmp3);
+
+                    last1s[N1s] = tmp3; // Overwrite
+
                 // printf("%f \n",window[wN]);
                 N1s++;
                 wN++;
-
                 if (N1s == (frameAve * WIN_N)) {
-                    N1s = 0;
-                    lastscale = global_scale_max_over_1s;
+                    N1s = 0;                   
+                    lastscale=global_scale_max_over_1s;
+                    scale=global_scale_max_over_1s;
                     global_scale_max_over_1s = 0;
                 }
+
             }
 
             //every WIN_N samples do this
@@ -362,11 +368,15 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                     scaleprev_temp = scaleprev_temp + pow((double) windowPrev[n], 2) / WIN_N;
                     scale_temp = scale_temp + pow((double) window[n], 2) / WIN_N;
                 }
+                
+                rms1s = rms1s + scaleover_temp / ((double) frameAve ) + scale_temp / ((double) frameAve );
+
                 scaleover_temp = sqrt(scaleover_temp);
                 scaleprev_temp = sqrt(scaleprev_temp);
                 scale_temp = sqrt(scale_temp);
-                rms1s = rms1s + scaleover_temp / ((double) frameAve ) ;//+ scale_temp / ((double) frameAve * 2.0);
-
+                
+                double maxNormOverD =0;
+                double maxNormD=0;
                 for (n = 0; n < WIN_N; n++) {
 
                     //                tdData=tdData./sqrt(mean((tdData.^2)));
@@ -386,10 +396,13 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                 //scaling for the histogram is required using the max level over
                 // the 1 s win which is lastscale, and we need to un-normalise the
                 //  1024 sample window (was normed to rms level over 1024)
+                //normed2rms
+                //scale=max(normed2rms)/originalrms
+                double scaleC=lastscale / scaleover_temp;
                 gatewayFunctionDist(windowOverD,
                         WIN_N,
                         (double) header.fs,
-                        lastscale / scaleover_temp,
+                        scaleC,
                         outMatrix,
                         lastOverspectrum,
                         count_,
@@ -400,16 +413,28 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                         peaks,
                         roughness,
                         skewness);
-
+            count_[0]=count_[0]/((double)WIN_N/(double)header.fs*2.0);
                 for (n = 0; n < 255; n++) {
                     featstmp[n] = outMatrix[n];
                 }
-                featstmp[255] = (SpecFlux2);
-                featstmp[256] = kurt[0];
-                featstmp[257] = ent[0];
+                
+                //     'hist'
+            //     'spectral_skewness_Mean'
+            //     'spectral_kurtosis_Mean'
+            //     'spectral_spectentropy_Mean'
+            //     'spectral_roughness_Mean'
+            //     'timbre_zerocross_Mean'
+            //     'timbre_spectralflux_Mean'
+                
+                featstmp[255] = skewness[0];
+                 featstmp[256] = kurt[0];
+               featstmp[257] = ent[0];
                 featstmp[258] = roughness[0];
-                featstmp[259] = skewness[0];
-                featstmp[260] = count_[0];
+                featstmp[259] = count_[0];
+                featstmp[260] = (SpecFlux2);
+        
+
+
             
 
                 for (n = 0; n < 261; n++) {
@@ -427,7 +452,7 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                 ent_[0] = ent_[0] + ent[0] / ((double) frameAve * 2.0);
                 roughness_[0] = roughness_[0] + roughness[0] / ((double) frameAve * 2.0);
                 skewness_[0] = skewness_[0] + skewness[0] / ((double) frameAve * 2.0);
-                count__[0] = count__[0]+(count_[0] / (double) ((double) WIN_N / (double) header.fs * 2)) / (frameAve * 2);
+                count__[0] = count__[0]+count_[0]/ ((double) frameAve * 2.0);
                 ;
                 ;
 
@@ -438,10 +463,12 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                 //Overlapping window
                 for (n = 0; n < 255; n++)
                     outMatrix[n] = 0;
+                
+                scaleC=lastscale / scale_temp;
                 gatewayFunctionDist(windowD,
                         WIN_N,
                         (double) header.fs,
-                        lastscale / scale_temp,
+                        scaleC,
                         outMatrix,
                         spectrum,
                         count_,
@@ -452,16 +479,17 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                         peaks,
                         roughness,
                         skewness);
+            count_[0]=count_[0]/((double)WIN_N/(double)header.fs*2.0);
 
                 for (n = 0; n < 255; n++) {
                     featstmp[n] = outMatrix[n];
                 }
-                featstmp[255] = (SpecFlux2);
-                featstmp[256] = kurt[0];
-                featstmp[257] = ent[0];
+                   featstmp[255] = skewness[0];
+                 featstmp[256] = kurt[0];
+               featstmp[257] = ent[0];
                 featstmp[258] = roughness[0];
-                featstmp[259] = skewness[0];
-                featstmp[260] = count_[0];
+                featstmp[259] = count_[0];
+                featstmp[260] = (SpecFlux2);
 
                 for (n = 0; n < 261; n++) {
                     fprintf(pFileRawData, "%f ", featstmp[n]);
@@ -476,7 +504,7 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                 ent_[0] = ent_[0] + ent[0] / ((double) frameAve * 2.0);
                 roughness_[0] = roughness_[0] + roughness[0] / ((double) frameAve * 2.0);
                 skewness_[0] = skewness_[0] + skewness[0] / ((double) frameAve * 2.0);
-                count__[0] = count__[0]+(count_[0] / (double) ((double) WIN_N / (double) header.fs * 2)) / (frameAve * 2);
+                count__[0] = count__[0]+count_[0] / ((double) frameAve * 2.0);
 
 
 
@@ -491,7 +519,10 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                     SpecFlux = SpecFlux + ((pow(lastOverspectrum[n] - lastspectrum[n], 2)));
                 SpecFlux2 = SpecFlux2 + sqrt(SpecFlux) / ((double) frameAve * 2.0);
                 counter++;
-                if ((frame % (frameAve)) == 0 && (frame > frameAve)) {
+                
+                if ((N1s == 0) && (frame > frameAve*2)) {
+
+                //if ((frame % (frameAve)) == 0 && (frame > frameAve)) {
                     double pmfmean = 0;
                     for (n = 0; n < 255; n++) {
                         pmfmean = pmfmean + outMatrix_[n];
@@ -501,12 +532,14 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                         feats[n] = outMatrix_[n] / pmfmean;
                         //printf("%f \n",feats[n]);
                     }
-                    feats[255] = (SpecFlux2);
+                    
+                    feats[255] = skewness_[0];
                     feats[256] = kurt_[0];
                     feats[257] = ent_[0];
                     feats[258] = roughness_[0];
-                    feats[259] = skewness_[0];
-                    feats[260] = count__[0];
+                    feats[259] = count__[0];
+                    feats[260] = (SpecFlux2);
+
                     //                printf("%f \n",feats[260]);
                     for (n = 0; n < 261; n++) {
                         fprintf(pFileMeanData, "%f ", feats[n]);
@@ -514,9 +547,9 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                     }
                             int distLevel = distTree.decisionTreeFun(feats);
                     //printf("frame centre %f Distortion Amount %i \n",(frame),5-distLevel);
-                    fprintf(pFile, " %0.2f %0.2f %i \n", (double) (frame * WIN_N - frameAve* WIN_N) / 44100.0, sqrt(rms1s), distLevel);
+                    fprintf(pFile, " %0.2f %0.2f %i \n", (double) (frame * WIN_N - frameAve* WIN_N) / 44100.0, sqrt(rms1s)/rmsD, distLevel);
                     if (verbose ==1){
-                    printf("Time (s) %0.2f RMS %0.2f Quality %0.0f \n", (double) (frame * WIN_N - frameAve* WIN_N) / 44100.0, sqrt(rms1s) , ((double) distLevel)/5.0*100.0);
+                    printf("Time (s) %0.2f RMS %0.2f Quality %0.0f \n", (double) (frame * WIN_N - frameAve* WIN_N) / 44100.0, sqrt(rms1s)/rmsD , ((double) distLevel)/5.0*100.0);
                     }
                     fprintf(pFileMeanData, "\n");
                     counter = 0;
@@ -534,6 +567,7 @@ void loadWav(char * filename, char * outFilename, const char *jsonFilename, char
                     count__[0] = 0;
                     SpecFlux2 = 0;
                     rms1s = 0;
+
                 }
 
                 for (n = 0; n < WIN_N; n++) {
