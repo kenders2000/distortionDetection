@@ -46,6 +46,7 @@ void replaceExt(string& s, const string& newExt) {
  */
 int main(int argc, char* argv[]) {
     int testForIO = 0;
+    int status=0;
     // char * inputFile = "iphone1.wav";
     // char * outputFile = "iphone1.wav";
     int opt = 0;
@@ -92,11 +93,11 @@ int main(int argc, char* argv[]) {
                 break;}
             case 'i':{
                 in_fname = optarg;
-                printf("\nInput file =%s", in_fname);
+                if (verbose ==1){printf("\nInput file =%s", in_fname);}
                 break;}
             case 'o':{
                 out_fname = optarg;
-                printf("\nOutput file=%s", out_fname);
+                if (verbose ==1){printf("\nOutput file=%s", out_fname);}
                 break;}
             case 'j':{
                 json_fname = optarg;
@@ -107,18 +108,18 @@ int main(int argc, char* argv[]) {
                 /* Case when user enters the command as
                  * $ ./cmd_exe -i
                  */
-                if (optopt == 'i') {
+                if (optopt == 'i') {status=1;
                     if (verbose ==1){
                     printf("\nMissing  input file");
                     }
                     /* Case when user enters the command as
                      * # ./cmd_exe -o
                      */
-                } else if (optopt == 'o') {
+                } else if (optopt == 'o') {status=1;
                     if (verbose ==1){
                     printf("\nMissing  output file");
                     }
-                } else {
+                } else {status=1;
                     if (verbose ==1){
                     printf("\nInvalid option received");
                     }
@@ -141,14 +142,20 @@ int main(int argc, char* argv[]) {
         printf("\n-g 1, sets the gain to apply. The default is 1.");
         printf("\n-f n, set the size of the analysis window, windows are 1024 samples.  The default is 43."); printf("\n");
          }
-
+         status=1;
     }else
     {    
        
-        loadWav(in_fname, out_fname,json_fname, treeDir, gain, frameAve,thresh,verbose);
+      status=  loadWav(in_fname, out_fname,json_fname, treeDir, gain, frameAve,thresh,verbose);
     }
 
+   if (status==1 )
+           exit (EXIT_FAILURE);
+       //printf("\nError!");
+     if (status==0)
+         exit(status);
+      //printf("\nSuccess!");
 
-    return 0;
+    return status;
 }
 
