@@ -24,7 +24,6 @@
       </nativedebugger>
       <runprofile version="9">
         <runcommandpicklist>
-          <runcommandpicklistitem>./distDet "-i" "CFunctionsFeatures/02 Bio.wav" "-o" "test/02 BioD.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25"</runcommandpicklistitem>
           <runcommandpicklistitem>./distDet "-i" "CFunctionsFeatures/02 BioD.wav" "-o" "test/02 BioD.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25"</runcommandpicklistitem>
           <runcommandpicklistitem>./distDet "-i" "CFunctionsFeatures/02 BioD.wav" "-o" "test/02 BioD.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25" "-j" "BioD.json"</runcommandpicklistitem>
           <runcommandpicklistitem>./distDet "-v" "1" "-i" "CFunctionsFeatures/02 BioD.wav" "-o" "test/02 BioD.txt" "-t" "1" "-g" "1" "-f" "43" "-w" "25" "-j" "BioD.json"</runcommandpicklistitem>
@@ -34,8 +33,9 @@
           <runcommandpicklistitem>./distDet "-v" "0" "-i" "test/02 BioD.wav" "-o" "test/02 BioD.txt"  "-f" "43" "-w" "75" "-j" "test/BioD.json"</runcommandpicklistitem>
           <runcommandpicklistitem>./distDet "-v" "1" "-i" "test/02 BioD.wav" "-o" "test/02 BioD.txt"  "-f" "43" "-w" "75" "-j" "test/BioD.json"</runcommandpicklistitem>
           <runcommandpicklistitem>./distDet "-v" "1" "-i" "C:\Users\ags056\Dropbox\Perception and Automated Assessment of Recorded Audio Quality\online_detector\testFiles\clipping\368__plagasul__metro-musica.wav" "-o" "test/02 BioD.txt"  "-f" "43" "-w" "75" "-j" "test/BioD.json"</runcommandpicklistitem>
+          <runcommandpicklistitem>./distDet "-v" "1" "-i" "C:\Users\ags056\Dropbox\Perception and Automated Assessment of Recorded Audio Quality\online_detector\testFiles\clipping\52779__inchadney__them-sheep-and-that-helicopter-landing.wav" "-o" "test/02 BioD.txt"  "-f" "43" "-w" "75" "-j" "test/BioD.json"</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>./distDet "-v" "1" "-i" "C:\Users\ags056\Dropbox\Perception and Automated Assessment of Recorded Audio Quality\online_detector\testFiles\clipping\368__plagasul__metro-musica.wav" "-o" "test/02 BioD.txt"  "-f" "43" "-w" "75" "-j" "test/BioD.json"</runcommand>
+        <runcommand>./distDet "-v" "1" "-i" "C:\Users\ags056\Dropbox\Perception and Automated Assessment of Recorded Audio Quality\online_detector\testFiles\clipping\52779__inchadney__them-sheep-and-that-helicopter-landing.wav" "-o" "test/02 BioD.txt"  "-f" "43" "-w" "75" "-j" "test/BioD.json"</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>
