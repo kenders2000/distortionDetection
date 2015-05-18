@@ -149,8 +149,8 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
      char str1[100] , str2[100];
     FILE * pFile;
      
-            
-    sprintf(str1,treeFilePrefix );
+    sprintf(str1, "%s/trainedTree_96_bags",treeFilePrefix);
+    //sprintf(str1,treeFilePrefix );
     DTree distTree;
     if (verbose ==1){printf("\nLoading Decision Trees");}
     distTree.readTextFilesTrees(str1);
