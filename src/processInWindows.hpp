@@ -38,9 +38,9 @@ extern "C" {
     
     void initVarsFeats(int N,int Fs);
     void computeMFCCs(float *windowIn, int N, int Fs,float *mfcc);
-    int loadWav(char * inFilename, char * outFilename,const char *jsonFilename,char *treeDir,float ,int frameAve,float thresh,int verbose);
+    int loadWav(char * inFilename, char * outFilename,const char *jsonFilename,char *treeDir,float ,int frameAve,float thresh,int verbose,char *treeFileLoc);
     void wavRms(char *filename, float* maxL, float *rms);
-   void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilename, char *treeDir, float gain, int frameAve, float thresh, int verbose,int delay);
+   void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilename, char *treeDir, float gain, int frameAve, float thresh, int verbose,int delay,char *treeFileLoc);
 ////
 }
 #include  "DecisionTreeClass.hpp"

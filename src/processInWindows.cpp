@@ -141,7 +141,7 @@ void wavRms(char *filename, float *maxL, float* rms) {
       
 }
 
-void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilename, char *treeDir, float gain, int frameAve, float thresh, int verbose,int delay) 
+void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilename, char *treeDir, float gain, int frameAve, float thresh, int verbose,int delay,char* treeFilePrefix) 
 {
 
     //    sprintf(str1, "trees/%s/levelClass", treeDir);
@@ -149,7 +149,8 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
      char str1[100] , str2[100];
     FILE * pFile;
      
-    sprintf(str1, "trees/dectrees_new/trainedTree_96_bags");
+            
+    sprintf(str1,treeFilePrefix );
     DTree distTree;
     if (verbose ==1){printf("\nLoading Decision Trees");}
     distTree.readTextFilesTrees(str1);
@@ -615,7 +616,7 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
 
 
 
-int loadWav(char * filename, char * outFilename, const char *jsonFilename, char *treeDir, float gain, int frameAve, float thresh, int verbose)
+int loadWav(char * filename, char * outFilename, const char *jsonFilename, char *treeDir, float gain, int frameAve, float thresh, int verbose,char* treeFilePrefix)
 {
    
     char str1[100], str2[100] ,str3[100] , datastring[100000];
@@ -648,7 +649,7 @@ int loadWav(char * filename, char * outFilename, const char *jsonFilename, char 
     for (ii=0;ii<(int)(1/over);ii++){
         
         int delay=(int)((float)(WIN_N*frameAve)*(over*ii));
-        loadWavWithDelay(filename, outFilename, jsonFilename, treeDir,  gain,  frameAve,  thresh,  verbose,delay );
+        loadWavWithDelay(filename, outFilename, jsonFilename, treeDir,  gain,  frameAve,  thresh,  verbose,delay ,treeFilePrefix);
         sprintf(str2,"%s_%i.txt",outFilename,delay);  
         pFile = fopen(str2, "r");
         nn=0;
