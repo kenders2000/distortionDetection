@@ -42,7 +42,7 @@ static struct wavfile header;
 void wavRms(char *filename, float *maxL, float* rms) {
     FILE * wav;
     float tmp3;
-    int verbose=1;
+    int verbose=0;
 
     wav = fopen(filename, "r");
      if(wav==NULL)
@@ -90,7 +90,7 @@ void wavRms(char *filename, float *maxL, float* rms) {
             //printf("should say data %.*s\n", 4, datahead);
         }
     }
-    printf("should say data %.*s\n", 4, datahead);
+    //printf("should say data %.*s\n", 4, datahead);
     // read data header 
     fread(&datasize, sizeof (int32_t), 1, wav);
 //    printf(" datasize %i\n", datasize);
