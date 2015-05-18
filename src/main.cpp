@@ -65,10 +65,10 @@ int main(int argc, char* argv[]) {
     float gain = 1;
     int frameAve = 43;
     int verbose=1;
-    char *treeFileLoc = (char *)"trees/dectrees_new/trainedTree_96_bags";
-    while ((opt = getopt(argc, argv, "i:o:f:h:w:j:v:tL:")) != -1) {
+    char *treeFileLoc = (char *)"trees/dectrees_new/trainedTree_98_bags";
+    while ((opt = getopt(argc, argv, "i:o:f:h:w:j:v:l:")) != -1) {
         switch (opt) {
-            case 'tL':{
+            case 'l':{
                 treeFileLoc= optarg;
             break;}
                 case 'v':{
