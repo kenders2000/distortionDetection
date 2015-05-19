@@ -35,12 +35,11 @@ class DTree{
 private:
     char * fileprefix;
     int filenameLen;
-
     int  noBags;
      int  *noBranches;
      int  *maxBrancheLen;
      int  **branchLengths;
-     int***branchLogic;
+     int ***branchLogic;
      float  ***branchValues;
      int  ***branchVectI;
      int  **classLabels;
@@ -50,6 +49,8 @@ private:
   public:
    void readTextFilesTrees(char * fileprefix);
    int decisionTreeFun(double *x);
+   void clearTreeFun();
+
 };
 
 

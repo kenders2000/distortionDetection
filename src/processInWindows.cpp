@@ -149,13 +149,7 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
      char str1[100] , str2[100];
     FILE * pFile;
      
-    sprintf(str1, "%s/trainedTree_96_bags",treeFilePrefix);
-    //sprintf(str1,treeFilePrefix );
-    DTree distTree;
-    if (verbose ==1){printf("\nLoading Decision Trees");}
-    distTree.readTextFilesTrees(str1);
-    if (verbose ==1){printf("\nDone");}
-    
+
 
     //http://www.sonicspot.com/guide/wavefiles.html
     //http://yannesposito.com/Scratch/en/blog/2010-10-14-Fun-with-wav/char 
@@ -607,10 +601,44 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
 
         }
     }
-    fclose(pFile);
+    fclose(pFile);  
 //    fclose(pFileRawData);
    // fclose(pFileMeanData);
+   //Deallocate memory
     
+    free(last1s);
+    free(window);
+    free(windowOver );
+    free(windowPrev );
+   free( windowD);
+    free(windowPrevD);
+    free(windowOverD );
+    free(mfcc);
+    free(mfccO );
+    free(mfccP);
+    free(feats);
+    free(featstmp );
+    //temp features
+    free(outMatrix);
+    free(lastspectrum);
+    free(spectrum);
+    free(lastOverspectrum);
+    free(centroid);
+    free(spread );
+    free(kurt);
+    free(ent);
+    free(roughness);
+    free(skewness);
+    free(peaks);
+    free(outMatrix_);
+    free(centroid_);
+    free(spread_  );
+    free(kurt_);
+    free(ent_);
+    free(roughness_ );
+    free(skewness_ );
+    free(peaks_);
+    free(SpecFluxV);
 }
 
 
@@ -627,6 +655,11 @@ int loadWav(char * filename, char * outFilename, const char *jsonFilename, char 
     float *rms = (float*) malloc(sizeof (float)*1);
     rms[0] = 0;
     wavRms(filename, maxL, rms);    
+    sprintf(str1, "%s/trainedTree_96_bags",treeFilePrefix);
+    //sprintf(str1,treeFilePrefix );
+    if (verbose ==1){printf("\nLoading Decision Trees");}
+    distTree.readTextFilesTrees(str1);
+    if (verbose ==1){printf("\nDone");}
     
     // NoBlocks = datasize / (header.bits_per_sample / 8 * header.nochan);
 

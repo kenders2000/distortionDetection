@@ -20,17 +20,19 @@ THE SOFTWARE.
 */
 
 #include "DecisionTreeClass.hpp"
-
+int maxBrancheLenTmp;
+int     maxnoBranchesTmp ;
+int     maxmaxBrancheLenTmp;
 void DTree::readTextFilesTrees (char * fileprefixIn) {
     fileprefix=fileprefixIn;
 //    filenameLen=filenameLenIn;
     int i, j, bagi;
     int noBranchesTmp = 0;
-    int maxBrancheLenTmp = 0;
+     maxBrancheLenTmp = 0;
     char str [50];
 
-    int maxnoBranchesTmp = 0;
-    int maxmaxBrancheLenTmp = 0;
+     maxnoBranchesTmp = 0;
+     maxmaxBrancheLenTmp = 0;
 
     
 
@@ -399,4 +401,53 @@ int DTree::decisionTreeFun(double *x) {
     return output;
 
 
+}
+void DTree::clearTreeFun () {
+     //delete fileprefix;
+ //   delete &filenameLen;
+    //delete[]  &noBags;
+ 
+    // delete[]  &noClasses;
+    
+     //delete  []noBranches;
+     //delete  []maxBrancheLen;
+    // delete  []branchLengths;
+     
+        ///  NOW DEallocate memory for decision trees
+     int i=0;
+     int j=0;
+     int k=0;
+   // noBranches=new int[noBags];
+   // maxBrancheLen = new int[noBags];
+    
+    for (i=0;i<noBags;i++){delete branchLengths[i];}
+            delete branchLengths;
+    
+    
+    //branchLogic=new int** [noBags];
+     for (i=0;i<noBags;i++){
+         for (j=0;j<maxnoBranchesTmp;j++)
+         delete branchLogic[i][j];
+         delete branchLogic[i];
+     }
+         delete branchLogic;
+    
+     for (i=0;i<noBags;i++){
+         for (j=0;j<maxnoBranchesTmp;j++)
+        delete branchValues[i][j];
+        delete branchValues[i];
+     }  delete branchValues;
+
+        
+     for (i=0;i<noBags;i++){
+         for (j=0;j<maxnoBranchesTmp;j++)
+         delete branchVectI[i][j];
+                  delete branchVectI[i];
+     }         delete branchVectI;
+
+    for (i=0;i<noBags;i++){delete classLabels[i];}
+    delete classLabels;
+
+    return;
+    
 }

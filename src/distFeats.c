@@ -229,6 +229,8 @@ void computeSpecPeaks( double *spectrum,double * out, double * f,int nfft)
             
         }
     }
+    
+    free(vlys);free(pks);
 }
 
 
@@ -368,4 +370,6 @@ void gatewayFunctionDist(double *inMatrix,
     computeRoughness( spectrum,roughness,peaks, f,ncols);
     computSpecSkew( spectrum, skewness,  f, ncols, centroid,  spread);
 //    printf("%f\n",counter[0]);
+    free(f);
+            
 }
