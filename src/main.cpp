@@ -58,7 +58,6 @@ int main(int argc, char* argv[]) {
     trees[0] =(char *)"dectrees_10_5000";
     trees[1] = (char *)"dectrees_10_20000";
     trees[2] = (char *)"dectrees_10_100000";
-    int tree = 1;
     char *treeDir;
     treeDir = trees[1];
     int treeFail = 0;

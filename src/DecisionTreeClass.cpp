@@ -416,7 +416,7 @@ void DTree::clearTreeFun () {
         ///  NOW DEallocate memory for decision trees
      int i=0;
      int j=0;
-     int k=0;
+     //JK int k=0;
    // noBranches=new int[noBags];
    // maxBrancheLen = new int[noBags];
     
