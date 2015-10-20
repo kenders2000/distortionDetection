@@ -46,7 +46,6 @@ extern "C" {
 #include  "DecisionTreeClass.hpp"
 
 #define WIN_N 1024
-    DTree distTree;
 
 //
 

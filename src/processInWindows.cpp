@@ -21,6 +21,7 @@ THE SOFTWARE.
 
 
 #include "processInWindows.hpp"
+    DTree distTree;
 
 struct wavfile {
     char id[4]; // should always contain "RIFF"
