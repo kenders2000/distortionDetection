@@ -7,11 +7,13 @@ This program automatically analyses .wav files and detects regions where there m
 
 This tool could be used when there are a large number of recordings of a particular source, for example clips of recordings from mobile devices of an outdoor concert (user generated content).  This tool can quickly analyse the audio from each to determine samples with the least amount of distortion and therefore of the highest quality.
 
-The distortion detection algorithm also provides time stamps identifying the regions which are free of wind noise.  This can allow producers to quickly stitch together content from multiple sources, or flag regions where extra processing such as noise reduction is required.
+The distortion detection algorithm also provides time stamps identifying the regions which are free of distortion.  This can allow producers to quickly stitch together content from multiple sources, or flag regions where extra processing such as noise reduction is required.
 
 Perceptual tests have shown that when distortion is present in speech music and other signals the HASQI (Hearing Aid Sound Quality index) is a good indicator of the quality of the recording for both normal and hearing impared listeners.  Therefore this detector works by trying to predict the HASQI which in turn indicates the possible degradation to the audio quality.
 
-_See Paul Kendrick, Iain R. Jackson, Trevor J. Cox, Bruno M. Fazenda and Francis Li, (TBC)
+If you utilise this work in anyway please could cite our the following paper in your work:
+
+Kendrick, Paul; Li, Francis; Fazenda, Bruno; Jackson, Iain; Cox, Trevor (2015). "Perceived Audio Quality of Sounds Degraded by Nonlinear Distortions and Single-Ended Assessment Using HASQI". Journal of the Audio Engineering Society 63 (9): 698–712.
 
 
 ## Usage
