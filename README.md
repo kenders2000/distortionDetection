@@ -1,7 +1,7 @@
 # Distortion and Clipping Detection in Audio Files
 ### University Of Salford Acoustics Research Centre
 
-## Overview
+## Overview 
 
 This program automatically analyses .wav files and detects regions where there may distortion due to overloading.  Distortion can degrade the quality of recordings.  
 
