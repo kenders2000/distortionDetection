@@ -99,7 +99,8 @@ void wavRms(char *filename, float *maxL, float* rms) {
 
      NoBlocks = datasize / (header.bits_per_sample / 8 * header.nochan);
     //header.NoBlocks=NoBlocks;
-    int i, c, n;
+    //JK int i, c, n;
+    int i, c;
 
     int frame = 0;
     for (i = 0; i < (NoBlocks); i++) {
@@ -147,7 +148,8 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
 
     //    sprintf(str1, "trees/%s/levelClass", treeDir);
     //    sprintf(str2, "trees/%s/snrClass", treeDir);
-     char str1[100] , str2[100];
+    //JK  char str1[100] , str2[100];
+    char str2[100];
     FILE * pFile;
      
 
@@ -166,7 +168,7 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
     FILE * wav;
     wav = fopen(filename, "r");
     //check openable
-    int test = sizeof (header);
+    //JK int test = sizeof (header);
     if (fread(&header, sizeof (header), 1, wav) < 1) {
         fprintf(stderr, "Can't read input file header %s\n", filename);
         exit(1);
@@ -242,7 +244,7 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
 
     int wN = 0;
     int N1s = 0;
-    int wNo = WIN_N / 2;
+    //JK int wNo = WIN_N / 2;
 
     //temp features
     double *outMatrix = (double*) calloc(WIN_N, sizeof (double));
@@ -295,13 +297,13 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
 
     //if the wav is 16 bit PCM
     int counter;
-    int firstWin = 0;
-    int classLevel;
-    int classSNR;
+    //JK int firstWin = 0;
+    //JK int classLevel;
+    //JK int classSNR;
     int frame = -1;
-    int sumclassSNR = 0;
-    int sumclassLevel = 0;
-    float avermsAW = 0;
+    //JK int sumclassSNR = 0;
+    //JK int sumclassLevel = 0;
+    //JK float avermsAW = 0;
     initVarsFeats(WIN_N, header.fs);
     for (i = 0; i < (WIN_N); i++)
         window[i] = 0;
@@ -369,7 +371,7 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
                 double scaleover_temp = 0;
                 double scaleprev_temp = 0;
                 double scale_temp = 0;
-                double global_scale = 1;
+                //JK double global_scale = 1;
                 for (n = 0; n < (WIN_N / 2); n++) {
                     windowOver[n] = windowPrev[n + WIN_N / 2];
                 }
@@ -389,8 +391,8 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
                 scaleprev_temp = sqrt(scaleprev_temp);
                 scale_temp = sqrt(scale_temp);
                 
-                double maxNormOverD =0;
-                double maxNormD=0;
+                //JK double maxNormOverD =0;
+                //JK double maxNormD=0;
                 for (n = 0; n < WIN_N; n++) {
 
                     //                tdData=tdData./sqrt(mean((tdData.^2)));
@@ -648,7 +650,8 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
 int loadWav(char * filename, char * outFilename, const char *jsonFilename, char *treeDir, float gain, int frameAve, float thresh, int verbose,char* treeFilePrefix)
 {
    
-    char str1[100], str2[100] ,str3[100] , datastring[100000];
+    //JK char str1[100], str2[100] ,str3[100] , datastring[100000];
+    char str1[100], str2[100], datastring[100000];
     FILE *pFileJSON;
     FILE * pFile;
    float* maxL = (float*) malloc(sizeof (float)*1);
@@ -729,7 +732,8 @@ int loadWav(char * filename, char * outFilename, const char *jsonFilename, char 
           }
         
            //printf("%f\n",QualStore2[ii]);
-            double rms, t, Qual;
+            //JK double rms, t, Qual;
+            double t, Qual;
             t=(ii+1)*frameAve*WIN_N*over/(double)header.fs;
             Qual=(QualStore2[ii]*4);
             fprintf(pFile,"%f %f %f\n", t, rmsStore[ii],Qual);
@@ -753,7 +757,7 @@ int loadWav(char * filename, char * outFilename, const char *jsonFilename, char 
     float count_wF3 = 0;
     float count_wF2 = 0;
     float count_wF1 = 0;
-    float count_wF0 = 0;
+    //JK float count_wF0 = 0;
 
 
    int counter = 0;
@@ -815,7 +819,8 @@ int loadWav(char * filename, char * outFilename, const char *jsonFilename, char 
     FILE * pFile2;
     pFile2 = fopen(outFilename, "w");
     pFile = fopen(str2, "r");
-    fprintf(pFile2, "Distortion Detection - University of Salford - the Good Recording Project http://www.goodrecording.net \n\n", filename);
+    //JK fprintf(pFile2, "Distortion Detection - University of Salford - the Good Recording Project http://www.goodrecording.net \n\n", filename);
+    fprintf(pFile2, "Distortion Detection - University of Salford - the Good Recording Project http://www.goodrecording.net \n\n");
     fprintf(pFile2, "Distortion Analysis for input file %s\n\n", filename);
     fprintf(pFile2, "Distortion Statistics, %% number of frames with distortion detected at the following Quality Levels \n\n");
     fprintf(pFile2, "%% of time in each Degradation range.\n");
@@ -858,9 +863,9 @@ int loadWav(char * filename, char * outFilename, const char *jsonFilename, char 
     firstWin = 0;
     int lastclean = 0; // 
     int thisclean = 0; // 
-    int initialised = 0;
-    int first = 0;
-    float win = 0;
+    //JK int initialised = 0;
+    //JK int first = 0;
+    //JK float win = 0;
     float start = 0;
     fprintf(pFile2, "\nDistortion free regions from - to (s) using a Threshold of %2.0f\n\n", thresh);
     fprintf(pFileJSON, "\t\"Distortion free regions\":\n \t [\n");
