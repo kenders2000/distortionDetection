@@ -39,6 +39,7 @@ struct wavfile {
 } __attribute__((__packed__));
 int32_t NoBlocks;
 static struct wavfile header;
+double rmsD;
 
 void wavRms(char *filename, float *maxL, float* rms) {
     FILE * wav;
@@ -162,8 +163,10 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
     maxL[0] = 1.5;
     float *rms = (float*) malloc(sizeof (float)*1);
     rms[0] = 0;
-    wavRms(filename, maxL, rms);    
-    double rmsD=(double)rms[0];
+    // wavRms(filename, maxL, rms);    
+    // double rmsD=(double)rms[0];
+    
+    printf("Fs  %f \n", rmsD);
 
     FILE * wav;
     wav = fopen(filename, "r");
@@ -384,9 +387,9 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
                     scaleprev_temp = scaleprev_temp + pow((double) windowPrev[n], 2) / WIN_N;
                     scale_temp = scale_temp + pow((double) window[n], 2) / WIN_N;
                 }
-                
+                if (isnan(scaleover_temp)==1){scaleover_temp=0;}
+                if (isnan(scale_temp)==1){scale_temp=0;}
                 rms1s = rms1s + scaleover_temp / ((double) frameAve ) + scale_temp / ((double) frameAve );
-
                 scaleover_temp = sqrt(scaleover_temp);
                 scaleprev_temp = sqrt(scaleprev_temp);
                 scale_temp = sqrt(scale_temp);
@@ -659,6 +662,8 @@ int loadWav(char * filename, char * outFilename, const char *jsonFilename, char 
     float *rms = (float*) malloc(sizeof (float)*1);
     rms[0] = 0;
     wavRms(filename, maxL, rms);    
+        // wavRms(filename, maxL, rms);    
+    rmsD=(double)rms[0];
     sprintf(str1, "%s/trainedTree_96_bags",treeFilePrefix);
     //sprintf(str1,treeFilePrefix );
     if (verbose ==1){printf("\nLoading Decision Trees");}
@@ -697,6 +702,7 @@ int loadWav(char * filename, char * outFilename, const char *jsonFilename, char 
                 &Qual);
             timeStore[nn]=(double)t;
             rmsStore[nn* (int)(1/over)+ii]=(double)rms;
+           rmsStore2[nn* (int)(1/over)+ii]=(double)rms; 
            QualStore[nn* (int)(1/over)+ii]=(double)(Qual-1)/4;
            QualStore2[nn* (int)(1/over)+ii]=(double)(Qual-1)/4;
 
@@ -736,7 +742,7 @@ int loadWav(char * filename, char * outFilename, const char *jsonFilename, char 
             double t, Qual;
             t=(ii+1)*frameAve*WIN_N*over/(double)header.fs;
             Qual=(QualStore2[ii]*4);
-            fprintf(pFile,"%f %f %f\n", t, rmsStore[ii],Qual);
+            fprintf(pFile,"%f %f %f\n", t, rmsStore2[ii],Qual);
             //printf("%f %f %f\n",t, rmsStore[ii],Qual);
 
     }
