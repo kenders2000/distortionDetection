@@ -47,7 +47,7 @@ Bad,	Poor,	Fair,	Good,	Excellent
 The test output of the text file shows an example where 75.0% of frames are free of distortion noise, but 18.7% of the time the quality is fair or worse%.  (the json outputs the same data but formatted as to be readable by a json interpreter).
 
 |Bad|Poor|Fair|Good|Excellent|
-|12.5,|6.2,|0.0,|6.2,|75.0|
+|0.0,|0.0,|9.7,|8.1,|82.3|
 
 These statistics can be used to make quick judgements about the file regarding the distribution of distorted parts of the signal, but it is down to the required application to choose a suitable set of criteria for acceptability.
 
@@ -61,22 +61,29 @@ The next set of parameters is the Distortion time history.  Three columns are pr
     
  ```
 |T(s)		|Quality Degradation(%)	 |RMS (normalised to global RMS) |
-|1.00		|100.00						|0.01|
-|2.00		|0.00						|0.52|
-|3.00		|0.00						|0.44|
-|3.99		|0.00						|0.56|
-|4.99		|0.00						|0.44|
-|5.99		|0.00						|0.28|
-|6.99		|0.00						|0.60|
-|7.99		|60.00						|2.28|
-|8.99		|80.00						|2.18|
-|9.98		|0.00						|0.77|
-|10.98		|20.00						|0.61|
-|11.98		|0.00						|0.34|
-|12.98		|0.00						|0.23|
-|13.98		|0.00						|0.67|
-|14.98		|0.00						|0.33|
-|15.98		|0.00						|0.47|
+|0.25		|0.00						|0.94
+|0.50|		|0.00|						|0.75
+0.75		0.00						0.77
+1.00		0.00						0.74
+1.25		3.12						0.85
+1.50		4.69						0.90
+1.75		6.25						0.92
+2.00		4.69						0.93
+2.25		3.12						0.93
+2.50		1.56						0.91
+2.75		0.00						0.89
+3.00		0.00						0.87
+3.24		0.00						0.83
+3.49		0.00						0.78
+3.74		0.00						0.71
+3.99		0.00						0.62
+4.24		0.00						0.53
+4.49		0.00						0.53
+4.74		0.00						0.66
+4.99		0.00						0.98
+5.24		4.69						1.48
+5.49		15.62						2.02
+
 ```
 The average quality is the average predicted quality level (HASQI) but each quality value for each window is weighted by the rms level.
 
@@ -90,9 +97,42 @@ The average quality is the average predicted quality level (HASQI) but each qual
 Finally a set of times is returned which represent the start and end points, in seconds, of regions in the recording which are free of distortion.  So the following example shows two segments, one from 0 to 1.99s and the next from 2.99 to 4.99 s.
 
 ```
-|1.00|	6.99|
-|8.98|	14.98|
+|0.25		|0.00    					|0.94|
+|0.50		|0.00	    				|0.75|
+|0.75		|0.00						|0.77|
+|1.00		|0.00						|0.74|
+|1.25		|3.12						|0.85|
+|1.50		|4.69						|0.90|
+|1.75		|6.25						|0.92|
+|2.00		|4.69						|0.93|
+|2.25		|3.12						|0.93|
+|2.50		|1.56						|0.91|
+|2.75		|0.00						|0.89|
+|3.00		|0.00						|0.87|
+|3.24		|0.00						|0.83|
+|3.49		|0.00						|0.78|
+|3.74		|0.00						|0.71|
+|3.99		|0.00						|0.62|
+|4.24		|0.00						|0.53|
+|4.49		|0.00						|0.53|
+|4.74		|0.00						|0.66|
+|4.99		|0.00						|0.98|
+|5.24		|4.69						|1.48|
+|5.49		|15.62						|2.02|
+|5.74		|26.56						|2.52|
+|5.99		|37.50						|2.87|
+|6.24		|39.06						|3.05|
+|6.49		|34.38						|3.12|
+|6.74		|35.94						|3.13|
+|6.99		|39.06						|3.08|
+|7.24		|46.88						|2.98|
+|7.49		|48.44						|2.79|
+|7.74		|37.50						|2.46|
+|7.99		|25.00						|2.06|
+|8.24		|12.50						|1.65|
+|8.49		|7.81						|1.31|
 ```
+Etc..
 
 An intermediate file is also created which contains the raw classes for sanity checking.
 
