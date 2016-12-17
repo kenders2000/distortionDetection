@@ -58,47 +58,10 @@ The next set of parameters is the Distortion time history.  Three columns are pr
  1. The time at the end of the analysis window
  2. The predicted quality degradation which is computed from  the predicted HASQI
  3. The RMS level over the window normalised to the RMS level of the file  
-    
- ```
-|T(s)		|Quality Degradation(%)	 |RMS (normalised to global RMS) |
-|0.25		|0.00						|0.94
-|0.50|		|0.00|						|0.75
-0.75		0.00						0.77
-1.00		0.00						0.74
-1.25		3.12						0.85
-1.50		4.69						0.90
-1.75		6.25						0.92
-2.00		4.69						0.93
-2.25		3.12						0.93
-2.50		1.56						0.91
-2.75		0.00						0.89
-3.00		0.00						0.87
-3.24		0.00						0.83
-3.49		0.00						0.78
-3.74		0.00						0.71
-3.99		0.00						0.62
-4.24		0.00						0.53
-4.49		0.00						0.53
-4.74		0.00						0.66
-4.99		0.00						0.98
-5.24		4.69						1.48
-5.49		15.62						2.02
-
-```
-The average quality is the average predicted quality level (HASQI) but each quality value for each window is weighted by the rms level.
-
-#### Average Quality (RMS weighted ave)
-```
-|46.8|
- ```
  
-#### Start and end points distortion free sections
-
-Finally a set of times is returned which represent the start and end points, in seconds, of regions in the recording which are free of distortion.  So the following example shows two segments, one from 0 to 1.99s and the next from 2.99 to 4.99 s.
-
 ```
 |0.25		|0.00    					|0.94|
-|0.50		|0.00	    				|0.75|
+|0.50		|0.00	    					|0.75|
 |0.75		|0.00						|0.77|
 |1.00		|0.00						|0.74|
 |1.25		|3.12						|0.85|
@@ -132,7 +95,18 @@ Finally a set of times is returned which represent the start and end points, in 
 |8.24		|12.50						|1.65|
 |8.49		|7.81						|1.31|
 ```
-Etc..
+Etc.. Table is longer.. 
+The average quality is the average predicted quality level (HASQI) but each quality value for each window is weighted by the rms level.
+
+#### Average Quality (RMS weighted ave)
+```
+|82.9|
+ ```
+ 
+#### Start and end points distortion free sections -
+
+Finally a set of times is returned which represent the start and end points, in seconds, of regions in the recording which are free of distortion.  So the following example does not show are regions above 75% quality degredation.
+
 
 An intermediate file is also created which contains the raw classes for sanity checking.
 
