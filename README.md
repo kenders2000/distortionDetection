@@ -18,9 +18,9 @@ Kendrick, Paul; Li, Francis; Fazenda, Bruno; Jackson, Iain; Cox, Trevor (2015). 
 
 ## Usage
 
-The program requires compiling using a C++ compiler and runs as a command line executable which analyses a wavfile and provides information as regards the level, location and effect on quality of any wind noise that may be present.
+The program requires compiling using a C++ compiler and runs as a command line executable which analyses a wavfile and provides information as regards the level, location and effect on quality of any distortion that may be present.
 
-Wav files must be 16 or 32 bit int, or 32 bit float PCM. All channels are collapsed to one (average of all channels)
+Wav files must be 16 or 32 bit int, or 32 bit float PCM at 44.1 kHz. All channels are collapsed to one (average of all channels)
 
 ```
 windDet -i wav_filename -o output_filename  [-f 43] [-w 30] [-v 0]
@@ -122,5 +122,5 @@ The software was developed at the University of Salford and uses a bagged decisi
 ## How does it work?
 
 
-For any comments or questions, please email p.kendrick@salford.ac.uk
+For any comments or questions, please email kenders2000@gmail.com
 
