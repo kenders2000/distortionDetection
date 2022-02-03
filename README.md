@@ -23,7 +23,7 @@ The program requires compiling using a C++ compiler and runs as a command line e
 Wav files must be 16 or 32 bit int, or 32 bit float PCM at 44.1 kHz. All channels are collapsed to one (average of all channels)
 
 ```
-windDet -i wav_filename -o output_filename  [-f 43] [-w 30] [-v 0]
+./distDet -i wav_filename -o output_filename  [-f 43] [-w 30] [-v 0]
      -i and -o are required parameters, they provide the input .wav filename and the output filename respectively. Specify the output as a text file, include path if required, the program will also output a json file with the same name in the same path.
      -f n, sets the number of frames used to produce the analysis window to n, windows are 1024 samples long.  The default is n = 43 frames, which is about 1 s
 	 -w sets the threshold degradation in quality level for identifying noise free segments, default is 30(%), but this can be adjusted depending on the required quality level for the application
