@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   featureExtraction.h
  * Author: ags056
  The MIT License (MIT)
@@ -33,5 +33,7 @@ THE SOFTWARE.
 #include "aweighting.h"
  void melSpec(int Fs,float * f, float * spec,int fftn,float *mfcc);
  void dctComp(float * data, int N,float *mfcc);
+ void aWeighting(float * f, float * a ,int Len, float * rms,int fftn );
+ void aWeightingPreComp(float * f,int fftn);
 
 #endif	/* FEATUREEXTRACTION_H */

@@ -26,8 +26,8 @@ THE SOFTWARE.
     static float * f;
     static float * W;
     float *Xre, *Xim; // DFT of x (real and imaginary parts)
-    static float * window; 
-    //static double  complex * windowc, *Wc; 
+    static float * window;
+    //static double  complex * windowc, *Wc;
     static float* Mel ;
     static float * Melfull ;
     static float * MelSpec;
@@ -51,17 +51,17 @@ void initVarsFeats(int N,int Fs)
 
     cfg = kiss_fft_alloc(N,0,0,0);
 
-    window = malloc(sizeof(float)*N); 
-    f = malloc(sizeof(float)*N); 
-    W = malloc(sizeof(float)*N); 
+    window = malloc(sizeof(float)*N);
+    f = malloc(sizeof(float)*N);
+    W = malloc(sizeof(float)*N);
     //float complex z1
-//    Wc = malloc(sizeof(complex float )*N); 
- //   windowc = malloc(sizeof(complex float )*N); 
+//    Wc = malloc(sizeof(complex float )*N);
+ //   windowc = malloc(sizeof(complex float )*N);
 
-    
-    Xre = malloc(sizeof(float)*N); 
-    Xim = malloc(sizeof(float)*N);     
-    
+
+    Xre = malloc(sizeof(float)*N);
+    Xim = malloc(sizeof(float)*N);
+
     for (i=0;i<=N/2;i++)
     {
         f[i]=((float)i) / ((float)N) * ((float)Fs);
@@ -69,15 +69,15 @@ void initVarsFeats(int N,int Fs)
 
     }
     aWeightingPreComp(f,N);
-    
+
     Mel = malloc((meln+3) * sizeof(float));
     Melfull = malloc((N/2+1) * sizeof(float));
-    
+
     MelSpec = malloc(meln * sizeof(float));
     triang = malloc((N/2+1)  * sizeof(float));
     PSD = malloc((N/2+1)  * sizeof(float));
      //triangFull=malloc((N/2+1)*meln  * sizeof(float));
-     
+
     triangFull=(float **) malloc(meln*sizeof(float *));
     for(i=0;i<meln;i++)
         triangFull[i]=(float *) malloc((N/2+1)*sizeof(float));
@@ -98,17 +98,17 @@ void initVarsFeats(int N,int Fs)
     {
         // Mel(i)=2595 * log10(1+minf/700)+MelSpacing*(i-1)+MelSpacing;
         //  f_frommel(i) = 700*(10.^(Mel(i)/2595)-1);
-        
+
         Mel[i]=(log10(1.0+MINF/700)*k)+MelSpacing*(i)+MelSpacing;//  Mel centres
     }
-    
+
     //  FILE * pFile;
     // pFile = fopen ("dataoutMELSPEC.txt","w");
-    
+
     for ( i=0;i<meln;++i) //iterate over mel freq banks
     {
         float  Mel_low_up, Mel_hig_up;
-        
+
         if (i==0)
         {
             Mel_low_up = 0;
@@ -117,8 +117,8 @@ void initVarsFeats(int N,int Fs)
             Mel_low_up= Mel[i-1];
         }
         Mel_hig_up= Mel[i+1];
-        
-        
+
+
         for( i2=0;i2<fftn/2;i2++)
         {
             float m, c;
@@ -131,45 +131,45 @@ void initVarsFeats(int N,int Fs)
                 c=-m*Mel[i]+1.0;
                 triangFull[i][i2]=m*Melfull[i2]+c;
             }
-            
-            
+
+
             if(triangFull[i][i2]<0.0) {triangFull[i][i2]=0.0;};
         }
-        
-        
+
+
     }
-    
+
 }
 
 /*void DFT ( float *x,float *z,int nfft)
 {
-    
+
 int jj;//z=zeros(1,nfft);
 float complex   Sum=0;
 int n,k;
-for (n=0 ; n<nfft ; ++n) 
-     
+for (n=0 ; n<nfft ; ++n)
+
     // Calculate DFT of x using brute force
     for (k=0 ; k<nfft ; ++k)
     {
         // Real part of X[k]
         Xre[k] = 0;
-        for (n=0 ; n<nfft ; ++n) 
+        for (n=0 ; n<nfft ; ++n)
             Xre[k] += x[n] * cos(n * k * PI2 / nfft);
-         
+
         // Imaginary part of X[k]
         Xim[k] = 0;
         for (n=0 ; n<nfft ; ++n) Xim[k] -= x[n] * sin(n * k * PI2 / nfft);
-         
+
         // Power at kth frequency bin
         z[k] = sqrt(Xre[k]*Xre[k] + Xim[k]*Xim[k]);
     }
-     
+
 //return;
 }*/
 
 void computeMFCCs(float *windowIn, int N, int Fs,float *mfcc)
-{   
+{
     int i;
     float rms[2];
     // apply hanning window
@@ -177,7 +177,7 @@ void computeMFCCs(float *windowIn, int N, int Fs,float *mfcc)
         float sum2=0;
 
     //Wc[0]=0;
-    for ( i = 0; i < N; i++) 
+    for ( i = 0; i < N; i++)
     {
     float multiplier = 0.5 * (1.0 - cosf(2.0*PI2/2.0*(float)i/((float)N-1)));
     window[i] = multiplier * windowIn[i];
@@ -188,7 +188,7 @@ void computeMFCCs(float *windowIn, int N, int Fs,float *mfcc)
                     sum2=sum2+pow(window[i],2)/N;
 
     }
-    
+
     sum=sqrtf(sum);// Normliseing facotr for window.
     sum2=sqrtf(sum2);// Normliseing facotr for window.
 
@@ -197,16 +197,16 @@ void computeMFCCs(float *windowIn, int N, int Fs,float *mfcc)
     kiss_fft(cfg,cin,cout);   //fft code
        for ( i = 0; i < N; i++)    //Magnitude spectrum
           W[i]=sqrt(pow((float)cout[i].r,2) + pow((float)cout[i].i,2))/ sqrt((float)N/2);
-    
+
     aWeighting(f, W ,N, rms,N );   // Compute a-weighted rms
-     melSpec(Fs, f, W,N,mfcc);  
-            
-    
+     melSpec(Fs, f, W,N,mfcc);
+
+
     float SPLA= 20 * log10(rms[0]/sum);
     float SPL= 20 * log10(rms[1]/sum);
      mfcc[0]=SPLA;
-     
-   
+
+
    /*FILE * pFile;
    pFile = fopen ("win1T.txt","w");
        for (i=0;i<=N;i++)
@@ -214,7 +214,7 @@ void computeMFCCs(float *windowIn, int N, int Fs,float *mfcc)
         fprintf(pFile,"%f \n",window[i]);
        }
    fclose(pFile);
-   
+
    pFile = fopen ("win1F.txt","w");
        for (i=0;i<=N;i++)
        {
@@ -223,7 +223,7 @@ void computeMFCCs(float *windowIn, int N, int Fs,float *mfcc)
        fclose(pFile);*/
 
 }
-    
+
 
 void melSpec(int Fs,float * f, float * spec,int fftn,float *mfcc)
 {
@@ -231,13 +231,13 @@ void melSpec(int Fs,float * f, float * spec,int fftn,float *mfcc)
     int meln=16;
     float MAXF = 8000.0;
     float MINF = 20.0;
-    int i,i2;    
+    int i,i2;
     for (i=0;i<fftn/2+1;++i)
     {
         PSD[i]=2*pow(spec[i]/sqrt(fftn),2);
               // printf("%f\n",spec[i]);
     }
-       
+
     /////////////////////////
     //Freq 2 mel %	m = ln(1 + f/700) * 1000 / ln(1+1000/700)
     //[1] J. Makhoul and L. Cosell. "Lpcw: An lpc vocoder with
@@ -249,44 +249,44 @@ void melSpec(int Fs,float * f, float * spec,int fftn,float *mfcc)
     //int Len=sizeof(f)/sizeof(double);
 
 
-    
+
     //  FILE * pFile;
     // pFile = fopen ("dataoutMELSPEC.txt","w");
-       
-       
+
+
     for ( i=0;i<meln;++i) //iterate over mel freq banks
     {
         MelSpec[i]=0.0;
         // printf("%f\n",Mel[i]);
         //Now compute the triangualr weigthting for each
-        
-        
-        
+
+
+
         for( i2=0;i2<fftn/2;i2++)
         {
             // printf("%f\n",triang[i2]);
-            
+
             MelSpec[i]=MelSpec[i]+triangFull[i][i2]*(PSD[i2]);
-            
+
             //y=mx+c;  when x=Mel[i], y=1, when x = 0 (or halfway between mel points)y=0; c is the ammount of vertical movement that occours up to the point where we want the value to be 0, so it is m*MEL
             //NSLog(@"%f",triang[i]);
         }
-        
-        
+
+
         //freqdata->Mel[i]=(Mel[i]);
         //MelSpec[i]=(MelSpec[i]);
         //freqdata->MelSpec[i]=MelSpec[i];
         mfcc[i]=0;
-        
+
       // fprintf(pFile, "%f \n",MelSpec[i]);
-        
+
         //mfcc[i]=meldata.MelSpec[i];
         //   mfcc[i]=log(MelSpec[i]);
         //    meanMFCC=meanMFCC+meldata.mfcc[i] / MELN ;
     }
      //fclose(pFile);
     dctComp(MelSpec, meln,mfcc);
-  
+
 }
 void dctComp(float * data, int N,float *mfcc)
 {
@@ -307,9 +307,9 @@ void dctComp(float * data, int N,float *mfcc)
     {
      mfcc[k]=mfcc[k]+
              logf(data[n])*cosf(PI2/2.0/N  *(n+0.5)*k);
-       // mfcc[k]=mfcc[k]+logf(data[n])*cosf( ((M_PI)*((float)n+0.5)*(float)k));    
+       // mfcc[k]=mfcc[k]+logf(data[n])*cosf( ((M_PI)*((float)n+0.5)*(float)k));
     }
-            
+
 
            if(k==0)
             {
@@ -321,14 +321,14 @@ void dctComp(float * data, int N,float *mfcc)
         mean=mean+mfcc[k]/N;
 
     }
-    
+
     //Normalise MFCC (zero mean sd ==1
     for( k=0;k<N;k++)
     {
         var=var+((mfcc[k]-mean)  *  (mfcc[k]-mean) )/(N-1);
     }
     float sd=sqrtf(var);
-    
+
    //  FILE * pFile;
   // pFile = fopen ("mfcc.txt","w");
 
@@ -352,10 +352,10 @@ void dctComp(float * data, int N,float *mfcc)
     //for(int k=0;k<N;k++)
     //{
     //    var1=var1+pow(mfcc[k]-mean1,2)/(N-1);
-        
+
     //}
     //sd=sqrt(var);
     //sd1=sqrt(var1);
 
-    
+
 }

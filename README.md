@@ -1,7 +1,7 @@
 # Distortion and Clipping Detection in Audio Files
 ### University Of Salford Acoustics Research Centre
 
-## Overview 
+## Overview
 
 This program automatically analyses .wav files and detects regions where there may distortion due to overloading.  Distortion can degrade the quality of recordings.  
 
@@ -20,6 +20,8 @@ Kendrick, Paul; Li, Francis; Fazenda, Bruno; Jackson, Iain; Cox, Trevor (2015). 
 
 The program requires compiling using a C++ compiler and runs as a command line executable which analyses a wavfile and provides information as regards the level, location and effect on quality of any distortion that may be present.
 
+To build the executable you need gcc installed, just type `make` in the root folder to compile.
+
 Wav files must be 16 or 32 bit int, or 32 bit float PCM at 44.1 kHz. All channels are collapsed to one (average of all channels)
 
 ```
@@ -30,7 +32,7 @@ Wav files must be 16 or 32 bit int, or 32 bit float PCM at 44.1 kHz. All channel
 	 -v verbose 1 and diagnostic messages are printed, 0 and they are not
 	 -j specifies the path and name of the json data file containing the json formated data.
 ```
-   
+
 ### Output file description and example
 
 The output text file will contain four sets of outputs: global statistics, distortion noise time history, and start and end points of clean regions. And the overall quality of the file, (weighted average of quality using the rms to weight) Using the following parameter set should provide the results presented.
@@ -53,12 +55,12 @@ These statistics can be used to make quick judgements about the file regarding t
 
 #### Distortion time history
 
-The next set of parameters is the Distortion time history.  Three columns are presented: 
+The next set of parameters is the Distortion time history.  Three columns are presented:
 
  1. The time at the end of the analysis window
  2. The predicted quality degradation which is computed from  the predicted HASQI
  3. The RMS level over the window normalised to the RMS level of the file  
- 
+
 ```
 |0.25		|0.00    					|0.94|
 |0.50		|0.00	    					|0.75|
@@ -95,14 +97,14 @@ The next set of parameters is the Distortion time history.  Three columns are pr
 |8.24		|12.50						|1.65|
 |8.49		|7.81						|1.31|
 ```
-Etc.. Table is longer.. 
+Etc.. Table is longer..
 The average quality is the average predicted quality level (HASQI) but each quality value for each window is weighted by the rms level.
 
 #### Average Quality (RMS weighted ave)
 ```
 |82.9|
  ```
- 
+
 #### Start and end points distortion free sections -
 
 Finally a set of times is returned which represent the start and end points, in seconds, of regions in the recording which are free of distortion.  So the following example does not show are regions above 75% quality degredation.
@@ -116,11 +118,10 @@ The University of Salford Acoustics Research Centre is carrying out a project en
 
 It is licensed under the MIT license and uses the [KISS_fft library](http://sourceforge.net/projects.kissfft/) which is licensed under the revised BSD license. You are therefore free to use this in pretty much any project.  If you do use this work in any project [an acknowledgement would be appreciated](http://www.salford.ac.uk/computing-science-engineering/subjects/acoustics-audio-and-video).
 
-The software was developed at the University of Salford and uses a bagged decision tree to analyse MFCCs to discover if an audio frame contains microphone wind noise, it is part of the Good Recording Project at the University of Salford Acoustic Research Centre. 
+The software was developed at the University of Salford and uses a bagged decision tree to analyse MFCCs to discover if an audio frame contains microphone wind noise, it is part of the Good Recording Project at the University of Salford Acoustic Research Centre.
 
 
 ## How does it work?
 
 
 For any comments or questions, please email kenders2000@gmail.com
-
