@@ -52,7 +52,7 @@ void wavRms(char *filename, float *maxL, float* rms) {
     if (verbose ==1){   printf("Can't read input file \n");}
         exit(1);
     }
-       
+
     //check openable
     int test = sizeof (header);
     if (fread(&header, sizeof (header), 1, wav) < 1) {
@@ -79,7 +79,7 @@ void wavRms(char *filename, float *maxL, float* rms) {
         fprintf(stderr, "Input must be sampled at 44100 Hz \n");
         exit(0);
     }
-    // Skip though rest of header to find data 
+    // Skip though rest of header to find data
     char datahead[4];
     int32_t datasize;
     int skip = 0;
@@ -93,7 +93,7 @@ void wavRms(char *filename, float *maxL, float* rms) {
         }
     }
     //printf("should say data %.*s\n", 4, datahead);
-    // read data header 
+    // read data header
     fread(&datasize, sizeof (int32_t), 1, wav);
 //    printf(" datasize %i\n", datasize);
 
@@ -141,10 +141,10 @@ void wavRms(char *filename, float *maxL, float* rms) {
     rms[0] = sqrt(tmp3 / (double(frame)));
       rewind(wav);
       fclose (wav);
-      
+
 }
 
-void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilename, char *treeDir, float gain, int frameAve, float thresh, int verbose,int delay,char* treeFilePrefix) 
+void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilename, char *treeDir, float gain, int frameAve, float thresh, int verbose,int delay,char* treeFilePrefix)
 {
 
     //    sprintf(str1, "trees/%s/levelClass", treeDir);
@@ -152,21 +152,19 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
     //JK  char str1[100] , str2[100];
     char str2[100];
     FILE * pFile;
-     
+
 
 
     //http://www.sonicspot.com/guide/wavefiles.html
-    //http://yannesposito.com/Scratch/en/blog/2010-10-14-Fun-with-wav/char 
+    //http://yannesposito.com/Scratch/en/blog/2010-10-14-Fun-with-wav/char
     //char  filename[]="test16S.wav";
     //char  filename[]="iphone1.wav";
     float* maxL = (float*) malloc(sizeof (float)*1);
     maxL[0] = 1.5;
     float *rms = (float*) malloc(sizeof (float)*1);
     rms[0] = 0;
-    // wavRms(filename, maxL, rms);    
+    // wavRms(filename, maxL, rms);
     // double rmsD=(double)rms[0];
-    
-    printf("Fs  %f \n", rmsD);
 
     FILE * wav;
     wav = fopen(filename, "r");
@@ -194,7 +192,7 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
         fprintf(stderr, "Input must be sampled at 44100 Hz \n");
         exit(1);
     }
-    // Skip though rest of header to find data 
+    // Skip though rest of header to find data
     char datahead[4];
     int32_t datasize;
     int skip = 0;
@@ -207,7 +205,7 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
             //printf("should say data %.*s\n", 4, datahead);
         }
     }
-    // read data header 
+    // read data header
     // printf("should say data %.*s\n", 4, datahead);
     fread(&datasize, sizeof (int32_t), 1, wav);
      NoBlocks = datasize / (header.bits_per_sample / 8 * header.nochan);
@@ -281,18 +279,18 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
 
    // FILE * pFileRawData;
    // char ss[100];
-   // sprintf(ss,"rawdata_delay_%i.txt",delay);     
+   // sprintf(ss,"rawdata_delay_%i.txt",delay);
 //    remove("rawdata.txt");
 //    pFileRawData = fopen("rawdata.txt", "w");
    // remove(ss);pFileRawData = fopen(ss, "w");
-    
+
    // FILE *pFileMeanData;
     //remove("meandata.txt");
     //pFileMeanData = fopen("meandata.txt", "w");
-   //    sprintf(ss,"meandata_delay_%i.txt",delay);  
+   //    sprintf(ss,"meandata_delay_%i.txt",delay);
   //  pFileMeanData = fopen(ss, "w");
-    
-   sprintf(str2,"%s_%i.txt",outFilename,delay);  
+
+   sprintf(str2,"%s_%i.txt",outFilename,delay);
     //sprintf(str2, "%s.b", outFilename);
     remove(str2);
     pFile = fopen(str2, "w");
@@ -354,11 +352,11 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
                     last1s[N1s] = tmp3; // Overwrite
 
                 // printf("%f \n",window[wN]);
-             
+
                 N1s++;
                 wN++;
                 if (N1s == (frameAve * WIN_N)) {
-                    N1s = 0;                   
+                    N1s = 0;
                     lastscale=global_scale_max_over_1s;
                     scale=global_scale_max_over_1s;
                     global_scale_max_over_1s = 0;
@@ -368,7 +366,7 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
 
             //every WIN_N samples do this
             if (wN == WIN_N ) {
-                                
+
 
                 frame++;
                 double scaleover_temp = 0;
@@ -393,7 +391,7 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
                 scaleover_temp = sqrt(scaleover_temp);
                 scaleprev_temp = sqrt(scaleprev_temp);
                 scale_temp = sqrt(scale_temp);
-                
+
                 //JK double maxNormOverD =0;
                 //JK double maxNormD=0;
                 for (n = 0; n < WIN_N; n++) {
@@ -443,17 +441,17 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
             //     'spectral_roughness_Mean'
             //     'timbre_zerocross_Mean'
             //     'timbre_spectralflux_Mean'
-                
+
                 featstmp[255] = skewness[0];
                  featstmp[256] = kurt[0];
                featstmp[257] = ent[0];
                 featstmp[258] = roughness[0];
                 featstmp[259] = count_[0];
                 featstmp[260] = (SpecFlux2);
-        
 
 
-            
+
+
 
                // for (n = 0; n < 261; n++) {
                //     fprintf(pFileRawData, "%f ", featstmp[n]);
@@ -481,7 +479,7 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
                 //Overlapping window
                 for (n = 0; n < 255; n++)
                     outMatrix[n] = 0;
-                
+
                 scaleC=lastscale / scale_temp;
                 gatewayFunctionDist(windowD,
                         WIN_N,
@@ -536,7 +534,7 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
                     SpecFlux = SpecFlux + ((pow(lastOverspectrum[n] - lastspectrum[n], 2)));
                 SpecFlux2 = SpecFlux2 + sqrt(SpecFlux) / ((double) frameAve * 2.0);
                 counter++;
-                
+
                 // Every )frameAve frames do, (not counting the 50% overlap)
                 if ((N1s == 0) && (frame > frameAve)) {
                 //if ((frame % (frameAve)) == 0 && (frame > frameAve)) {
@@ -607,11 +605,11 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
 
         }
     }
-    fclose(pFile);  
+    fclose(pFile);
 //    fclose(pFileRawData);
    // fclose(pFileMeanData);
    //Deallocate memory
-    
+
     free(last1s);
     free(window);
     free(windowOver );
@@ -652,7 +650,7 @@ void loadWavWithDelay(char * filename, char * outFilename, const char *jsonFilen
 
 int loadWav(char * filename, char * outFilename, const char *jsonFilename, char *treeDir, float gain, int frameAve, float thresh, int verbose,char* treeFilePrefix)
 {
-   
+
     //JK char str1[100], str2[100] ,str3[100] , datastring[100000];
     char str1[100], str2[100], datastring[100000];
     FILE *pFileJSON;
@@ -661,15 +659,15 @@ int loadWav(char * filename, char * outFilename, const char *jsonFilename, char 
     maxL[0] = 1.5;
     float *rms = (float*) malloc(sizeof (float)*1);
     rms[0] = 0;
-    wavRms(filename, maxL, rms);    
-        // wavRms(filename, maxL, rms);    
+    wavRms(filename, maxL, rms);
+        // wavRms(filename, maxL, rms);
     rmsD=(double)rms[0];
     sprintf(str1, "%s/trainedTree_96_bags",treeFilePrefix);
     //sprintf(str1,treeFilePrefix );
     if (verbose ==1){printf("\nLoading Decision Trees");}
     distTree.readTextFilesTrees(str1);
     if (verbose ==1){printf("\nDone");}
-    
+
     // NoBlocks = datasize / (header.bits_per_sample / 8 * header.nochan);
 
     double over = 0.25;
@@ -683,16 +681,16 @@ int loadWav(char * filename, char * outFilename, const char *jsonFilename, char 
                QualStore[ii]=1;
                QualStore2[ii]=1;
            }
-       
+
 
     int  nn=0;
     int cc=0;
     ii=0;
     for (ii=0;ii<(int)(1/over);ii++){
-        
+
         int delay=(int)((float)(WIN_N*frameAve)*(over*ii));
         loadWavWithDelay(filename, outFilename, jsonFilename, treeDir,  gain,  frameAve,  thresh,  verbose,delay ,treeFilePrefix);
-        sprintf(str2,"%s_%i.txt",outFilename,delay);  
+        sprintf(str2,"%s_%i.txt",outFilename,delay);
         pFile = fopen(str2, "r");
         nn=0;
         while (fgets(datastring, sizeof (datastring), pFile) != NULL) {
@@ -702,7 +700,7 @@ int loadWav(char * filename, char * outFilename, const char *jsonFilename, char 
                 &Qual);
             timeStore[nn]=(double)t;
             rmsStore[nn* (int)(1/over)+ii]=(double)rms;
-           rmsStore2[nn* (int)(1/over)+ii]=(double)rms; 
+           rmsStore2[nn* (int)(1/over)+ii]=(double)rms;
            QualStore[nn* (int)(1/over)+ii]=(double)(Qual-1)/4;
            QualStore2[nn* (int)(1/over)+ii]=(double)(Qual-1)/4;
 
@@ -710,7 +708,7 @@ int loadWav(char * filename, char * outFilename, const char *jsonFilename, char 
             nn++;
         }
     }
-    
+
     sprintf(str2, "%s.b", outFilename);
     remove(str2);
     pFile = fopen(str2, "w");
@@ -722,7 +720,7 @@ int loadWav(char * filename, char * outFilename, const char *jsonFilename, char 
     for (ii=0;ii<(cc+(int)1/over);ii++)
     {
         if (ii>=((int)1/over))
-        {            
+        {
             QualStore2[ii]=QualStore2[ii]/(weight);
             rmsStore2[ii]=rmsStore2[ii]/(weight);
             for (int jj=1;jj<(1/over);jj++){
@@ -731,12 +729,12 @@ int loadWav(char * filename, char * outFilename, const char *jsonFilename, char 
             }
 
 
-        } 
+        }
           if (ii<((int)1/over))  {
             QualStore2[ii]=QualStore[ii];
             rmsStore2[ii]=rmsStore[ii];
           }
-        
+
            //printf("%f\n",QualStore2[ii]);
             //JK double rms, t, Qual;
             double t, Qual;
@@ -804,7 +802,7 @@ int loadWav(char * filename, char * outFilename, const char *jsonFilename, char 
         if (Qual >= 3.5 && Qual < 4)
             count_wF1++;
 
-   // printf( "%f, %0.1f,\t%0.1f,\t%0.1f,\t%0.1f,\t%0.1f\n",Qual, count_wF1, count_wF2, count_wF3, count_wF4, count_wF5)    ;  
+   // printf( "%f, %0.1f,\t%0.1f,\t%0.1f,\t%0.1f,\t%0.1f\n",Qual, count_wF1, count_wF2, count_wF3, count_wF4, count_wF5)    ;
     counter++;
     }
     fclose(pFile);
@@ -854,7 +852,7 @@ int loadWav(char * filename, char * outFilename, const char *jsonFilename, char 
         fprintf(pFileJSON, "\t\t{\"Ts\": %0.2f, \"Te\": %0.2f, \"rms\": %0.2f, \"QDeg\": %0.2f}", t-frameAve*WIN_N*over/(double)header.fs,t, rms, 100 - (qual / 4)*100.0);
         firstWin = 1;
         counter++;
-    }    
+    }
     fclose(pFile);
     pFile = fopen(str2, "r");
    ///////////////////////////// Average Stats
@@ -863,12 +861,12 @@ int loadWav(char * filename, char * outFilename, const char *jsonFilename, char 
     fprintf(pFileJSON, "\t\"AveRmsWQual\":\n \t [ \n");
     fprintf(pFileJSON, "\t\t%0.1f\n\t\t],\n", ((double)aveQual)*100.0);
 
-    
+
     ///////////////////////////// Find contiguous regions without distortion noise
 
     firstWin = 0;
-    int lastclean = 0; // 
-    int thisclean = 0; // 
+    int lastclean = 0; //
+    int thisclean = 0; //
     //JK int initialised = 0;
     //JK int first = 0;
     //JK float win = 0;
@@ -918,5 +916,3 @@ int loadWav(char * filename, char * outFilename, const char *jsonFilename, char 
     //remove(str2);
 
 }
-
-
